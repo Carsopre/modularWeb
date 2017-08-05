@@ -7,50 +7,7 @@
     <img src="imgs/header_img.png">
   </div>
   -->
-  <nav class="navbar navbar-inverse navbar-static-top">
-    <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar-top" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="{% url 'home' %}">Business name</a>
-        <div class="social-items-top-collapsed visible-xs">
-          <a href="{% url 'contact' %}" class="fa fa-facebook-square fa-4x"></a>
-          <a href="{% url 'contact' %}" class="fa fa-twitter-square  fa-4x"></a>
-        </div>     
-      </div>
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="main-navbar-top">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="{% url 'about' %}">About us <span class="sr-only">(current)</span></a></li>
-          <li><a href="{% url 'content_page' %}">Content</a></li>
-          <!--
-          <li class="dropdown">
-            <a href="courses.html" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Courses <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="course1.html">Course 1</a></li>
-              <li><a href="course2.html">Course 2</a></li>
-              <li><a href="course3.html">Course 3</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="roster.html">Roster</a></li>
-            </ul>
-          </li>
-          -->
-          <li><a href="{% url 'gallery' %}">Gallery</a></li>
-          <li><a href="{% url 'contact' %}">Contact</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right hidden-xs">
-          <li><a href="{% url 'contact' %}" class="fa fa-facebook-square fa-4x"></a></li>
-          <li><a href="{% url 'contact' %}" class="fa fa-twitter-square  fa-4x"></a></li>
-        </ul>                  
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </nav>
-    
+  {% include "navbar.html" %}    
   <div class="container">
     <h3>About us</h3>
     <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam efficitur ac erat quis consectetur. Aenean bibendum urna dui, eget sodales velit porta eleifend. Praesent vel nisi varius, venenatis tellus nec, congue mauris. Vestibulum non neque sit amet orci pharetra bibendum vel eget est. Morbi sed nibh vel dolor pretium iaculis. Praesent a risus vel leo ullamcorper egestas vitae quis purus. Proin ut est eget justo gravida suscipit dignissim nec ante. In dignissim dui in dui malesuada dapibus. Phasellus tempor magna purus, eget commodo enim fringilla at.
