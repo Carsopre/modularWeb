@@ -13,77 +13,36 @@
       <div class="col-lg-12">
         <h1 class="page-header">Thumbnail Gallery</h1>
       </div>
+      {% for image in images %}
       <div class="col-lg-4 col-md-4 col-xs-6 thumb" data-toggle="modal" data-target="#gallery-modal">
-        <a class="thumbnail" href="#gallery-dialog-carousel"  data-slide-to="0">
-            <img class="img-responsive" src="{% static 'imgs/Jellyfish.jpg' %}">
-
-        </a>
-      </div>      
-      <div class="col-lg-4 col-md-4 col-xs-6 thumb" data-toggle="modal" data-target="#gallery-modal">
-        <a class="thumbnail" href="#gallery-dialog-carousel" data-slide-to="1">
-          <img class="img-responsive" src="{% static 'imgs/Koala.jpg' %}">
+        <a class="thumbnail" href="#gallery-dialog-carousel" data-slide-to="{{ forloop.counter0 }}">
+            <img class="img-responsive" src="{{ image.url }}">
         </a>
       </div>
-      <div class="col-lg-4 col-md-4 col-xs-6 thumb" data-toggle="modal" data-target="#gallery-modal">
-        <a class="thumbnail" href="#gallery-dialog-carousel" data-slide-to="2">
-          <img class="img-responsive" src="{% static 'imgs/Lighthouse.jpg' %}">
-        </a>
-      </div>
-      <div class="col-lg-4 col-md-4 col-xs-6 thumb" data-toggle="modal" data-target="#gallery-modal">
-        <a class="thumbnail" href="#gallery-dialog-carousel" data-slide-to="3">
-          <img class="img-responsive" src="{% static 'imgs/Penguins.jpg' %}">
-        </a>
-      </div>
-      <div class="col-lg-4 col-md-4 col-xs-6 thumb" data-toggle="modal" data-target="#gallery-modal">
-        <a class="thumbnail" href="#gallery-dialog-carousel" data-slide-to="4">
-           <img class="img-responsive" src="{% static 'imgs/Tulips.jpg' %}">
-
-        </a>
-      </div>
+      {% endfor %}
       <!-- modals -->
       <div id="gallery-modal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg gallery-dialog">
           <!--<a class="close" href="#">×</a>-->
+          {% if images %}
           <div class="modal-content">
             <div class="modal-body gallery-dialog-body">
                 <div id="gallery-dialog-carousel" class="carousel slide" data-ride="carousel" data-interval="false">
                     <!-- Wrapper for slides -->
                     <div class="carousel-inner" role="listbox">
-                      <div class="item active">
-                        <img src="{% static 'imgs/Jellyfish.jpg' %}" alt="Jellyfish">
-                        <div class="galery-dialog-img-caption">
-                          Looks cool, but not cool
+                      {% for image in images %}
+                        <div class="item {% if image is images|first %} active {% endif %}">
+                          <img src="{{ image.url }}" alt="{{ image.title }}">
+                          <div class="galery-dialog-img-caption">
+                            {{ image.description }}
+                          </div>
                         </div>
-                      </div>
-                      <div class="item">
-                        <img src="{% static 'imgs/Koala.jpg' %}" alt="Koala">
-                        <div class="galery-dialog-img-caption">
-                          It´s cute, not its claws.
-                        </div>
-                      </div>
-                      <div class="item">
-                        <img src="{% static 'imgs/Lighthouse.jpg' %}" alt="Lighthouse">
-                        <div class="galery-dialog-img-caption">
-                          Lights the way. Duh.
-                        </div>
-                      </div>
-                      <div class="item">
-                        <img src="{% static 'imgs/Penguins.jpg' %}" alt="Penguins">
-                        <div class="galery-dialog-img-caption">
-                          Tailor-made suits.
-                        </div>
-                      </div>
-                      <div class="item">
-                        <img src="{% static 'imgs/Tulips.jpg' %}" alt="Tulips">
-                        <div class="galery-dialog-img-caption">
-                          Expensive flowers.
-                        </div>
-                      </div>
+                      {% endfor %}
                     </div>
+                    <!-- Left and right controls -->
                     <a href="#" role="button" data-dismiss="modal">
                       <span class="glyphicon glyphicon-remove-circle gallery-dialog-close"></span>
                     </a>
-                    <!-- Left and right controls -->
                     <a class="gallery-dialog-controls previous" href="#gallery-dialog-carousel" role="button" data-slide="prev">
                       <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                       <span class="sr-only">Previous</span>
@@ -95,6 +54,7 @@
                 </div>
             </div>
           </div>
+          {% endif %}
         </div>
       </div>
     </div>

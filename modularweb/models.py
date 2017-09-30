@@ -38,8 +38,15 @@ class ContentPage(models.Model):
 	def __unicode__(self):
 		return '%s' % self.title
 
+class Photography(models.Model):
+	title = models.CharField(max_length=50)
+	slug = models.SlugField(max_length=100, unique=True)
+	description = models.CharField(max_length=150)
+	url = models.URLField(max_length=200)
+
 class GalleryPage(models.Model):
 	title = models.CharField(max_length=50)
+	photographies = models.ManyToManyField( Photography )
 	slug = models.SlugField(max_length=100, unique=True)
 	body = models.TextField()
 	def __unicode__(self):

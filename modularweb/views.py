@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from modularweb.models import ContentPage
+from modularweb.models import ContentPage, GalleryPage, Photography
 
 def index(request):
     variables = {
@@ -23,9 +23,16 @@ def about(request):
     return render(request, 'aboutus.html', variables)
 
 def gallery(request):
+    try :
+        loadedImages = Photography.objects.all()
+        pass
+    except Exception as e:
+        raise Http404("Content not found")
+
     variables = {
     				'pageName': 'Gallery',
-    				'nbar': 'gallery'
+    				'nbar': 'gallery',
+                    'images': loadedImages
     			}
     return render(request, 'gallery.html', variables)
 
