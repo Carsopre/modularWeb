@@ -1,8 +1,12 @@
+from django.http import HttpResponse
 from django.shortcuts import render
-
+from modularweb.models import ContentPage
 
 def index(request):
-    return render(request, 'index.html', {})
+    variables = {
+    				'nbar': 'index'
+    			}
+    return render(request, 'index.html', variables)
 
 def contact(request):
     variables = {
@@ -25,9 +29,17 @@ def gallery(request):
     			}
     return render(request, 'gallery.html', variables)
 
-def content_page_01(request):
+def content_page(request):
+    try:
+        content = ContentPage.objects.first()
+        pass
+    except Exception as e:
+        raise Http404("Content not found")
+    
     variables = {
     				'pageName': 'Content',
-    				'nbar': 'content'
+    				'nbar': 'content',
+                    'title': content.title,
+                    'body': content.body
     			}
-    return render(request, 'content_page_01.html', variables)
+    return render(request, 'content_page.html', variables)
