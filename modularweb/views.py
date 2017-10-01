@@ -24,7 +24,7 @@ def about(request):
 
 def gallery(request):
     try :
-        loadedImages = Photography.objects.all()
+        loadedGallery = GalleryPage.objects.last()
         pass
     except Exception as e:
         raise Http404("Content not found")
@@ -32,7 +32,7 @@ def gallery(request):
     variables = {
     				'pageName': 'Gallery',
     				'nbar': 'gallery',
-                    'images': loadedImages
+                    'gallery': loadedGallery.getGalleryPhotographies
     			}
     return render(request, 'gallery.html', variables)
 
