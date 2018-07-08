@@ -1,6 +1,12 @@
+The best option to install packages is to use a virtualenv
+http://virtualenvwrapper.readthedocs.io/en/latest/index.html
+> mkvirtualenv --python=python3 modularweb
+> workon modularweb
+
 1. Install python 3.6, (3.7 has some issues with Django)
-2. Make sure ´pip´ is installed, otherwise install it.
-3. pip install Django==1.11 (or latest lts)
+
+2. Make sure ´pip´ is installed, otherwise install it. 
+3. pip install -r requirements.txt
 4. in the ´modularweb´ directory:
 Note: Make sure the admin user is set.
 4.1. if no admin exists:
