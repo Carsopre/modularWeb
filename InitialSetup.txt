@@ -1,0 +1,12 @@
+1. Install python 3.6, (3.7 has some issues with Django)
+2. Make sure ´pip´ is installed, otherwise install it.
+3. pip install Django==1.11 (or latest lts)
+4. in the ´modularweb´ directory:
+4.1. if no admin exists:
+4.1.1 python manage.py createsuperuser
+4.1.2 insert the admin data
+4.2. python manage.py migrate
+4.3. python manage.py loaddata db.json (to load the initial db)
+4.4. python manage.py runserver
+
+Note: Make sure the admin user is set.
