@@ -1,6 +1,6 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
-from modularweb.models import ContentPage, GalleryPage, Photography
+from modularweb.models import ContactPage, BlogPage, GalleryPage, Photography
 
 def index(request):
     variables = {
@@ -8,45 +8,71 @@ def index(request):
     			}
     return render(request, 'index.html', variables)
 
-def contact(request):
-    variables = {
-    				'pageName': 'Contact',
-    				'nbar': 'contact'
-    			}
-    return render(request, 'contact.html', variables)
-
 def about(request):
+    title = None
+    pageName = None
+    # We assume we only load one contact (the latest one)
+    loadedContact = BlogPage.objects.filter(pageName='aboutus').last()
+    if(loadedContact is not None):
+        title = loadedContact.title
+        pageName = loadedContact.pageName
     variables = {
-    				'pageName': 'About us',
-    				'nbar': 'about'
+                    'title': title,
+                    'pageName': pageName,
+    				'nbar': 'about',
     			}
     return render(request, 'aboutus.html', variables)
 
-def gallery(request):
-    try :
-        loadedGallery = GalleryPage.objects.last()
-        pass
-    except Exception as e:
-        raise Http404("Content not found")
+def contact(request):
+    title = None
+    pageName = None
+    # We assume we only load one contact (the latest one)
+    loadedContact = ContactPage.objects.last()
+    if(loadedContact is not None):
+        title = loadedContact.title
+        pageName = loadedContact.pageName
 
     variables = {
-    				'pageName': 'Gallery',
+                    'title': title,
+                    'pageName': pageName,
+                    'nbar': 'contact',
+                    'contact': loadedContact
+                }
+    return render(request, 'contact.html', variables)
+
+def gallery(request):
+    title = None
+    pageName = None
+    galleryPhotos = None
+    # We assume we only load one gallery (the latest one)
+    loadedGallery = GalleryPage.objects.last()
+    if(loadedGallery is not None):
+        galleryPhotos = loadedGallery.getGalleryPhotographies
+        title = loadedGallery.title
+        pageName = loadedGallery.pageName
+
+    variables = {
+                    'title': title,
+    				'pageName': pageName,
     				'nbar': 'gallery',
-                    'gallery': loadedGallery.getGalleryPhotographies
+                    'gallery': loadedGallery,
+                    'galleryPhotos': galleryPhotos
     			}
     return render(request, 'gallery.html', variables)
 
-def content_page(request):
-    try:
-        content = ContentPage.objects.first()
-        pass
-    except Exception as e:
-        raise Http404("Content not found")
+def blog(request):
+    title = None
+    pageName = None
+    body = None
+    blog = BlogPage.objects.filter(pageName='blogPage').last()
+    if(blog is not None):
+        title = blog.title
+        pageName = blog.pageName
     
     variables = {
-    				'pageName': 'Content',
+                    'title': title,
+    				'pageName': pageName,
     				'nbar': 'content',
-                    'title': content.title,
-                    'body': content.body
+                    'blog': blog
     			}
-    return render(request, 'content_page.html', variables)
+    return render(request, 'blog.html', variables)

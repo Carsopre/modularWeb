@@ -8,5 +8,5 @@ urlpatterns = [
         url('aboutus',views.about, name='about'),
         url('contact', views.contact, name='contact'),
         url('gallery', views.gallery, name='gallery'),
-        url('content_page', views.content_page, name='content_page'),
+        url('blog', views.blog, name='blog'),
     ]

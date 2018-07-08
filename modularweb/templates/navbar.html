@@ -18,7 +18,7 @@
     <div class="collapse navbar-collapse" id="main-navbar-top">
       <ul class="nav navbar-nav">
         <li class="{% if nbar == 'about' %}active{% endif %}"><a href="{% url 'about' %}">About us</a></li>
-        <li class="{% if nbar == 'content' %}active{% endif %}"><a href="{% url 'content_page' %}">Content</a></li>
+        <li class="{% if nbar == 'content' %}active{% endif %}"><a href="{% url 'blog' %}">Content</a></li>
         <li class="{% if nbar == 'gallery' %}active{% endif %}"><a href="{% url 'gallery' %}">Gallery</a></li>
         <li class="{% if nbar == 'contact' %}active{% endif %}"><a href="{% url 'contact' %}">Contact</a></li>
       </ul>

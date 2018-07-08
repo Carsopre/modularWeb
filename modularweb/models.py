@@ -8,35 +8,27 @@ class BasicSettings(models.Model):
     def GetAppName(self):
         pass
 
-class PageCategory(models.Model):
-    name = models.CharField(max_length=50)
-    template = models.CharField(max_length=50)
-    def __str__(self):
-        return self.name
-        
 class Page(models.Model):
-    name = models.CharField(max_length=50)
-    pageCategory = models.ForeignKey(
-                        PageCategory, 
-                        on_delete=models.CASCADE)
-    pageAbsoluteUrl = models.CharField(max_length=50)
-
-class AboutUsPage(models.Model):
     title = models.CharField(max_length=50)
-    body = models.TextField()
-    pageName = models.CharField(max_length=50)
-
-class ContactPage(models.Model):
-    title = models.CharField(max_length=50)
-    content = models.CharField(max_length=50)
-    pageName = models.CharField(max_length=50)
-
-class ContentPage(models.Model):
-    title = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=100, unique=True)
-    body = models.TextField()
+    pageName = models.CharField(max_length=50, unique=True)
     def __str__(self):
         return self.title
+
+class ContactPage(Page):
+    content = models.CharField(max_length=50)
+    email = models.EmailField()
+    phone = models.CharField(max_length=50)
+
+class Fields(models.Model):
+    name = models.CharField(max_length=50)
+    value = models.CharField(max_length=250)
+    contactPage = models.ForeignKey(
+                            ContactPage,
+                            on_delete=models.CASCADE)
+
+class BlogPage(Page):
+    slug = models.SlugField(max_length=100, unique=True)
+    body = models.TextField()
 
 class Photography(models.Model):
     title = models.CharField(max_length=50)
@@ -46,23 +38,9 @@ class Photography(models.Model):
     def __str__(self):
         return self.title
 
-class GalleryPage(models.Model):
-    title = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=100, unique=True)
-    body = models.TextField()
-    def __str__(self):
-        return self.title
-    
-    def getGalleryPhotographies(self):
-    	galleryPhotos = GalleryPhotographies.objects.filter( gallery = self )
-    	photographies = []
-    	for galleryPhoto in galleryPhotos:
-    		photographies.append( galleryPhoto.photography )
-    	return photographies
-
 class GalleryPhotographies(models.Model):
     gallery = models.ForeignKey(
-                        GalleryPage,
+                        Page,
                         on_delete=models.CASCADE)
     photography = models.ForeignKey(
                         Photography,
@@ -72,7 +50,13 @@ class GalleryPhotographies(models.Model):
     class Meta:
         ordering = ('gallery',)
 
-class Page(models.Model):
-    title = models.CharField(max_length=50)
-    content = models.CharField(max_length=50)
-    pageName = models.CharField(max_length=50)
+class GalleryPage(Page):
+    slug = models.SlugField(max_length=100, unique=True)
+    body = models.TextField()
+
+    def getGalleryPhotographies(self):
+        galleryPhotos = GalleryPhotographies.objects.filter( gallery = self )
+        photographies = []
+        for galleryPhoto in galleryPhotos:
+            photographies.append( galleryPhoto.photography )
+        return photographies
