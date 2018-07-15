@@ -1,11 +1,28 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
-from modularweb.models import ContactPage, BlogPage, GalleryPage, Photography
+from modularweb.models import Gallery, ContactPage, Page, GalleryPage, Photography, Fields
 
 def index(request):
+    gallery = Gallery.objects.filter(slug='indexBgs').first()
     variables = {
-    				'nbar': 'index'
-    			}
+                'nbar': 'index',
+                'pageName':  ContactPage.GetContactFieldValue('pageName'),
+                'about': Page.objects.filter(slug='indexAbout').first(),
+                'mainBg': Photography.GetPhotographyUrl('mainBg'),
+                'middleBg': Photography.GetPhotographyUrl('middleBg'),
+                'closureBg': Photography.GetPhotographyUrl('closureBg'),
+                'indexText1': ContactPage.GetContactFieldValue('indexText1'),
+                'indexText2': ContactPage.GetContactFieldValue('indexText2'),
+                'indexText3': ContactPage.GetContactFieldValue('indexText3'),
+                'indexText4': ContactPage.GetContactFieldValue('indexText4'),
+                'indexTextWork': ContactPage.GetContactFieldValue('indexTextWork'),
+                'linkedin': ContactPage.GetContactFieldValue('linkedin'),
+                'github': ContactPage.GetContactFieldValue( 'github'),
+                'email': ContactPage.GetEmail('indexContact'),
+                'facebook': ContactPage.GetContactFieldValue('facebook'),
+                'flickr': ContactPage.GetContactFieldValue( 'flickr'),
+                'instagram': ContactPage.GetContactFieldValue( 'instagram')        
+            }
     return render(request, 'index.html', variables)
 
 def about(request):
