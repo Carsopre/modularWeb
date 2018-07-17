@@ -6,33 +6,32 @@ def index(request):
     gallery = Gallery.objects.filter(slug='indexBgs').first()
     variables = {
                 'nbar': 'index',
-                'pageName':  ContactPage.GetContactFieldValue('pageName'),
+                'pageName':  Fields.GetContactFieldValue('pageName'),
                 'about': Page.objects.filter(slug='indexAbout').first(),
                 'mainBg': Photography.GetPhotographyUrl('mainBg'),
                 'middleBg': Photography.GetPhotographyUrl('middleBg'),
                 'closureBg': Photography.GetPhotographyUrl('closureBg'),
-                'indexText1': ContactPage.GetContactFieldValue('indexText1'),
-                'indexText2': ContactPage.GetContactFieldValue('indexText2'),
-                'indexText3': ContactPage.GetContactFieldValue('indexText3'),
-                'indexText4': ContactPage.GetContactFieldValue('indexText4'),
-                'indexTextWork': ContactPage.GetContactFieldValue('indexTextWork'),
-                'linkedin': ContactPage.GetContactFieldValue('linkedin'),
-                'github': ContactPage.GetContactFieldValue( 'github'),
+                'indexText1': Fields.GetContactFieldValue('indexText1'),
+                'indexText2': Fields.GetContactFieldValue('indexText2'),
+                'indexText3': Fields.GetContactFieldValue('indexText3'),
+                'indexText4': Fields.GetContactFieldValue('indexText4'),
+                'indexTextWork': Fields.GetContactFieldValue('indexTextWork'),
+                'linkedin': Fields.GetContactFieldValue('linkedin'),
+                'github': Fields.GetContactFieldValue( 'github'),
                 'email': ContactPage.GetEmail('indexContact'),
-                'facebook': ContactPage.GetContactFieldValue('facebook'),
-                'flickr': ContactPage.GetContactFieldValue( 'flickr'),
-                'instagram': ContactPage.GetContactFieldValue( 'instagram')        
+                'facebook': Fields.GetContactFieldValue('facebook'),
+                'flickr': Fields.GetContactFieldValue( 'flickr'),
+                'instagram': Fields.GetContactFieldValue( 'instagram')        
             }
     return render(request, 'index.html', variables)
 
 def about(request):
     title = None
     pageName = None
-    # We assume we only load one contact (the latest one)
-    loadedContact = BlogPage.objects.filter(pageName='aboutus').last()
-    if(loadedContact is not None):
-        title = loadedContact.title
-        pageName = loadedContact.pageName
+    loadedAbout = Page.GetPage('aboutus')
+    if(loadedAbout is not None):
+        title = loadedAbout.title
+        pageName = loadedAbout.pageName
     variables = {
                     'title': title,
                     'pageName': pageName,
@@ -81,7 +80,7 @@ def blog(request):
     title = None
     pageName = None
     body = None
-    blog = BlogPage.objects.filter(pageName='blogPage').last()
+    blog = Page.GetPage('blogPage')
     if(blog is not None):
         title = blog.title
         pageName = blog.pageName

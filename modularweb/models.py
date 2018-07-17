@@ -14,16 +14,13 @@ class Page(models.Model):
     body = models.TextField(blank = True)
     def __str__(self):
         return self.title
+    def GetPage(slugPage):
+        return Page.objects.filter( slug = slugPage ).first()
 
 class ContactPage(Page):
     content = models.CharField(max_length=50, blank = True)
     email = models.EmailField(blank = True)
     phone = models.CharField(max_length=50, blank = True)
-    def GetContactFieldValue(fieldSlug):
-        field = Fields.objects.filter(slug = fieldSlug).first()
-        if(field is not None):
-            return field.value
-        return ""
     def GetEmail(slugContact):
         page = ContactPage.objects.filter( slug = slugContact).first()
         if( page is not None):
@@ -38,6 +35,11 @@ class Fields(models.Model):
     contactPage = models.ManyToManyField(
                             ContactPage,
                             blank = True)
+    def GetContactFieldValue(fieldSlug):
+        field = Fields.objects.filter(slug = fieldSlug).first()
+        if(field is not None):
+            return field.value
+        return ""
     def __str__(self):
         return self.name
 
