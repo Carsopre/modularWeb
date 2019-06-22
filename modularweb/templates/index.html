@@ -2,11 +2,7 @@
 <html lang="en">
 {% include "header.html" %}
 <body>
-<div class="bgimg-1" style="background-image: url({{mainBg}})">
-    {% for mainField in landingFields %}
-        {{mainField}}
-        {{mainField.fieldType}}
-    {% endfor %}
+<div class="bgimg-1" style="background-image: url({{mainBg}})">    
     <div class="main-page-text">
     {% if landingMainFields is not None %}
         {% for mainField in landingMainFields %}
@@ -22,21 +18,24 @@
     </div>
     <div class="main-page-scroll-down-sign" title="Go to content"></div>
 </div>
+{% if contentPages is not None %}
+    {% for contentPage in contentPages %}
+        <div style="position:relative;">
+            <div class="row text-block" >
+              <div class="col col-md-8 offset-md-2">
+                  <p>
+                      <h3>{{contentPage.title}}</h3>
+                        {{contentPage.body | safe}}
+                  </p>
+              </div>
+            </div>
+        </div>
 
-<div style="position:relative;">
-    <div class="row text-block" >
-      <div class="col col-md-8 offset-md-2">
-          <p>
-              <h3>{{about.title}}</h3>
-                {{about.body | safe}}
-          </p>
-      </div>
-    </div>
-</div>
-    
-<div class="bgimg-2"  style="background-image: url({{middleBg}})">
-    <div class="main-page-scroll-down-sign" title="Go to content"></div>
-</div>
+        <div class="bgimg-2"  style="background-image: url({{contentPage.background.url}})">
+            <div class="main-page-scroll-down-sign" title="Go to content"></div>
+        </div>
+    {% endfor %}
+{% endif %}
 
 <div class="bgimg-1" style="background-image: url({{closureBg}})">
     {% if socialNetworks is not None %}
@@ -54,25 +53,25 @@
         </div>
     {% endif %}
     <div class="caption-box">
-        <div class="row content-row">
-            <div class="caption
-                        col-md-5
-                        col-sm-12">
-                <span>{{indexTextWork}}</span>
+        {% if linkedPages is not None %}
+            <div class="row content-row">
+            {% for linkedPage in linkedPages %}
+                <div class="caption
+                            col-md-5
+                            col-sm-12">
+                    <a href="{{linkedPage.url}}">{{linkedPage.title}}</a>
+                </div>
+            {% endfor %}
             </div>
-            <div class="caption
-                        col-md-5 offset-md-2
-                        col-sm-12">
-                <span>{{indexTextWork}}</span>
-            </div>  
-        </div>
+        {% endif %}
+        
         <div class="row content-row">
             <div class="caption
                         offset-md-2
                         col-md-8
                         col-sm-12
                         col-4">
-                <span>{{indexTextWork}}</span>
+                <span>Working on some new fancy features...</span>
             </div>  
         </div>
     </div>

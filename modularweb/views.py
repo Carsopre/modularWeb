@@ -1,21 +1,21 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
-from modularweb.models import Gallery, ContactPage, Page, GalleryPage, Photography, BaseField, LandingPageField, ContactField
+from modularweb.models import *
 
 def index(request):
     gallery = Gallery.objects.filter(slug='indexBgs').first()
+    homePage = MainPage.objects.filter(slug='home').first()
     variables = {
                 'nbar': 'index',
-                'about': Page.objects.filter(slug='indexAbout').first(),
                 'email': ContactPage.GetEmail('indexContact'),
-                'mainBg': Photography.GetPhotographyUrl('mainBg'),
-                'middleBg': Photography.GetPhotographyUrl('middleBg'),
-                'closureBg': Photography.GetPhotographyUrl('closureBg'),
+                'mainBg': homePage.background.url,
+                'closureBg': homePage.endBackground.url,
+                'landingMainFields': homePage.getLandingFields(LandingPageField.MAINFIELD),
+                'landingSubFields': homePage.getLandingFields(LandingPageField.SUBFIELD),
+                'socialNetworks': homePage.getContactFields().filter(isVisible=True).all(), 
+                'contentPages': homePage.getContentPages(),
+                'linkedPages': homePage.getLinkedPages(),
                 'pageName':  BaseField.GetContactFieldValue('pageName'),
-                'landingMainFields': LandingPageField.getMainFields(),
-                'landingSubFields': LandingPageField.getSubFields(),
-                'indexTextWork': BaseField.GetContactFieldValue('indexTextWork'),
-                'socialNetworks':ContactField.objects.filter(isVisible=True).all(), 
             }
     return render(request, 'index.html', variables)
 
