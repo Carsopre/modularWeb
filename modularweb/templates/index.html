@@ -3,12 +3,22 @@
 {% include "header.html" %}
 <body>
 <div class="bgimg-1" style="background-image: url({{mainBg}})">
+    {% for mainField in landingFields %}
+        {{mainField}}
+        {{mainField.fieldType}}
+    {% endfor %}
     <div class="main-page-text">
-        <h2>{{indexText1}}</h2>
-        <h2>{{indexText2}}</h2>
-        <h2>{{indexText3}}</h2>
+    {% if landingMainFields is not None %}
+        {% for mainField in landingMainFields %}
+            <h2>{{mainField}}</h2>
+        {% endfor %}
+    {% endif %}
+    {% if landingSubFields is not None %}
         <br>
-       <h3>{{indexText4}}</h3>
+        {% for subField in landingSubFields %}
+            <h3>{{subField}}</h3>
+        {% endfor %}
+    {% endif %}
     </div>
     <div class="main-page-scroll-down-sign" title="Go to content"></div>
 </div>

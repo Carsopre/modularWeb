@@ -1,6 +1,6 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
-from modularweb.models import Gallery, ContactPage, Page, GalleryPage, Photography, BaseField, ContactField
+from modularweb.models import Gallery, ContactPage, Page, GalleryPage, Photography, BaseField, LandingPageField, ContactField
 
 def index(request):
     gallery = Gallery.objects.filter(slug='indexBgs').first()
@@ -12,17 +12,10 @@ def index(request):
                 'middleBg': Photography.GetPhotographyUrl('middleBg'),
                 'closureBg': Photography.GetPhotographyUrl('closureBg'),
                 'pageName':  BaseField.GetContactFieldValue('pageName'),
-                'indexText1': BaseField.GetContactFieldValue('indexText1'),
-                'indexText2': BaseField.GetContactFieldValue('indexText2'),
-                'indexText3': BaseField.GetContactFieldValue('indexText3'),
-                'indexText4': BaseField.GetContactFieldValue('indexText4'),
+                'landingMainFields': LandingPageField.getMainFields(),
+                'landingSubFields': LandingPageField.getSubFields(),
                 'indexTextWork': BaseField.GetContactFieldValue('indexTextWork'),
-                'socialNetworks':ContactField.objects.filter(isVisible=True).all(),
-#                'linkedin': Fields.GetContactFieldValue('linkedin'),
-#                'github': Fields.GetContactFieldValue( 'github'),
-#                'facebook': Fields.GetContactFieldValue('facebook'),
-#                'flickr': Fields.GetContactFieldValue( 'flickr'),
-#                'instagram': Fields.GetContactFieldValue( 'instagram')        
+                'socialNetworks':ContactField.objects.filter(isVisible=True).all(), 
             }
     return render(request, 'index.html', variables)
 

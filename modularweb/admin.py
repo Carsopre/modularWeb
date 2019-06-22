@@ -4,8 +4,9 @@ from modularweb.models import *
 # Register your models here.
 
 admin.site.register(BasicSettings)
-admin.site.register(BaseField)
+#admin.site.register(BaseField)
 admin.site.register(ContactField)
+admin.site.register(LandingPageField)
 admin.site.register(Page)
 admin.site.register(ContactPage)
 admin.site.register(GalleryPage)

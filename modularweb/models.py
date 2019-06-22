@@ -28,6 +28,7 @@ class ContactPage(Page):
         return None
 
     
+
 class BaseField(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
     name = models.CharField(max_length=50)
@@ -40,6 +41,23 @@ class BaseField(models.Model):
         return ""
     def __str__(self):
         return self.name
+    
+class LandingPageField(BaseField):
+    MAINFIELD = 'MF'
+    SUBFIELD = 'SF'
+    FIELD_TYPES = [
+        (MAINFIELD, 'Main field (h2)'),
+        (SUBFIELD, 'Sub field (h3)')
+    ]
+    fieldType = models.CharField(
+        max_length=2,
+        choices=FIELD_TYPES,
+        default=MAINFIELD,
+    )
+    def getMainFields():
+        return LandingPageField.objects.filter( fieldType = LandingPageField.MAINFIELD ).all()
+    def getSubFields():
+        return LandingPageField.objects.filter( fieldType = LandingPageField.SUBFIELD ).all()
 
 class ContactField(BaseField):
     faIcon = models.CharField(max_length=50)
