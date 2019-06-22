@@ -28,21 +28,24 @@ class ContactPage(Page):
         return None
 
     
-class Fields(models.Model):
+class BaseField(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
     name = models.CharField(max_length=50)
     value = models.CharField(max_length=250)
-    contactPage = models.ManyToManyField(
-                            ContactPage,
-                            blank = True)
+
     def GetContactFieldValue(fieldSlug):
-        field = Fields.objects.filter(slug = fieldSlug).first()
+        field = BaseField.objects.filter(slug = fieldSlug).first()
         if(field is not None):
             return field.value
         return ""
     def __str__(self):
         return self.name
 
+class ContactField(BaseField):
+    faIcon = models.CharField(max_length=50)
+    faIconType = models.CharField(max_length=50, default="fab")
+    isVisible = models.BooleanField(default=True)
+    
 class Photography(models.Model):
     title = models.CharField(max_length=50)
     slug = models.SlugField(max_length=100, unique=True)

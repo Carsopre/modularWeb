@@ -1,27 +1,28 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
-from modularweb.models import Gallery, ContactPage, Page, GalleryPage, Photography, Fields
+from modularweb.models import Gallery, ContactPage, Page, GalleryPage, Photography, BaseField, ContactField
 
 def index(request):
     gallery = Gallery.objects.filter(slug='indexBgs').first()
     variables = {
                 'nbar': 'index',
-                'pageName':  Fields.GetContactFieldValue('pageName'),
                 'about': Page.objects.filter(slug='indexAbout').first(),
+                'email': ContactPage.GetEmail('indexContact'),
                 'mainBg': Photography.GetPhotographyUrl('mainBg'),
                 'middleBg': Photography.GetPhotographyUrl('middleBg'),
                 'closureBg': Photography.GetPhotographyUrl('closureBg'),
-                'indexText1': Fields.GetContactFieldValue('indexText1'),
-                'indexText2': Fields.GetContactFieldValue('indexText2'),
-                'indexText3': Fields.GetContactFieldValue('indexText3'),
-                'indexText4': Fields.GetContactFieldValue('indexText4'),
-                'indexTextWork': Fields.GetContactFieldValue('indexTextWork'),
-                'linkedin': Fields.GetContactFieldValue('linkedin'),
-                'github': Fields.GetContactFieldValue( 'github'),
-                'email': ContactPage.GetEmail('indexContact'),
-                'facebook': Fields.GetContactFieldValue('facebook'),
-                'flickr': Fields.GetContactFieldValue( 'flickr'),
-                'instagram': Fields.GetContactFieldValue( 'instagram')        
+                'pageName':  BaseField.GetContactFieldValue('pageName'),
+                'indexText1': BaseField.GetContactFieldValue('indexText1'),
+                'indexText2': BaseField.GetContactFieldValue('indexText2'),
+                'indexText3': BaseField.GetContactFieldValue('indexText3'),
+                'indexText4': BaseField.GetContactFieldValue('indexText4'),
+                'indexTextWork': BaseField.GetContactFieldValue('indexTextWork'),
+                'socialNetworks':ContactField.objects.filter(isVisible=True).all(),
+#                'linkedin': Fields.GetContactFieldValue('linkedin'),
+#                'github': Fields.GetContactFieldValue( 'github'),
+#                'facebook': Fields.GetContactFieldValue('facebook'),
+#                'flickr': Fields.GetContactFieldValue( 'flickr'),
+#                'instagram': Fields.GetContactFieldValue( 'instagram')        
             }
     return render(request, 'index.html', variables)
 

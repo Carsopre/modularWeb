@@ -29,46 +29,20 @@
 </div>
 
 <div class="bgimg-1" style="background-image: url({{closureBg}})">
-    <div class="contact-box">     
-        <div class="row content-row">
-            <a class="contact
-                      col-md-2
-                      col-sm-4 
-                      col-6" href="{{linkedin}}" target="_blank">
-                <span class="fab fa-linkedin fa-5x"></span>  
-            </a>
-            <a class="contact
-                      col-md-2 
-                      col-sm-4 
-                      col-6" href="{{github}}" target="_blank">
-                <span class="fab fa-github fa-5x"></span>
-            </a>
-            <a class="contact
-                      col-md-2 
-                      col-sm-4 
-                      col-6" href="mailto:{{email}}" target="_blank">
-                <span class="fas fa-at fa-5x"></span>  
-            </a>
-            <a class="contact
-                      col-md-2
-                      col-sm-4
-                      col-6" href="{{facebook}}" target="_blank">
-                <span class="fab fa-facebook fa-5x"></span>    
-            </a>
-            <a class="contact
-                      col-md-2 
-                      col-sm-4 
-                      col-6" href="{{flickr}}" target="_blank">
-                <span class="fab fa-flickr fa-5x"></span>  
-            </a>
-            <a class="contact
-                      col-md-2
-                      col-sm-4 
-                      col-6" href="{{instagram}}" target="_blank">
-                <span class="fab fa-instagram fa-5x"></span>  
-            </a>
+    {% if socialNetworks is not None %}
+        <div class="contact-box">     
+            <div class="row content-row">
+                {% for sn in socialNetworks %}
+                    <a class="contact
+                          col-md-2
+                          col-sm-4 
+                          col-6" href="{{sn.value}}" target="_blank">
+                        <span class="{{sn.faIconType}} fa-{{sn.faIcon}} fa-5x"></span>  
+                    </a>
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    {% endif %}
     <div class="caption-box">
         <div class="row content-row">
             <div class="caption

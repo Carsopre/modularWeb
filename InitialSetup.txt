@@ -10,6 +10,7 @@ http://virtualenvwrapper.readthedocs.io/en/latest/index.html
 4. in the ´modularweb´ directory:
 Note: Make sure the admin user is set.
 4.1. if no admin exists:
+4.1.0 python manage.py makemigrations
 4.1.1 python manage.py createsuperuser
 4.1.2 insert the admin data
 4.2. python manage.py migrate
