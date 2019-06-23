@@ -2,38 +2,54 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from modularweb.models import *
 
-def index(request):
+def __colSize(elementList, maxColInRow):
+    defaultSize = 12 // maxColInRow
+    if elementList is None:
+        return defaultSize
+    listSize = len(elementList)
+    if listSize > 1 and listSize < maxColInRow:
+        return 12 // listSize
+    return defaultSize
+
+def not_found(request, exception):
+    errorMessage = '404. The page you tried to access does not exist.'
+    return section(request, 'home', 'index.html', errorMessage)
     
-    gallery = Gallery.objects.filter(slug='indexBgs').first()
-    homePage = MainPage.objects.filter(slug='home').first()
-    socialNetworks = homePage.getIconFields().filter(isVisible=True).all()
-    linkedPages = homePage.getLinkedPages().filter(iconField__isVisible=True)
-    snColSize = __colSize(socialNetworks, 12)
-    lpColSize = __colSize(linkedPages, 4)
+def index(request):
+    return section(request, 'home', 'index.html')
+
+def section(request, pageSlug, template='section.html', errorMessage=None):
+    variables = []
+    sectionPage = MainPage.objects.filter(slug=pageSlug).first()
+    if section is None:
+        return render(request, template, variables)
+    
+    socialNetworks = sectionPage.getIconFields()
+    if socialNetworks is not None:
+        socialNetworks = socialNetworks.filter(isVisible=True)
+    snColSize = __colSize(socialNetworks, 12)    
+    
+    linkedPages = sectionPage.getLinkedPages()
+    if linkedPages is not None:
+        linkedPages = linkedPages.filter(iconField__isVisible=True)
+    lpColSize = __colSize(linkedPages, 4)    
     
     variables = {
         'nbar': 'index',
-        'email': ContactPage.GetEmail('indexContact'),
+        'errorMessage': errorMessage,
         'pageName':  BaseField.GetBaseFieldValue('pageName'),
-        'mainBg': homePage.background.url,
-        'closureBg': homePage.endBackground.url,
-        'landingMainFields': homePage.getLandingFields(LandingPageField.MAINFIELD),
-        'landingSubFields': homePage.getLandingFields(LandingPageField.SUBFIELD),
-        'contentPages': homePage.getContentPages(),
+        'mainBg': sectionPage.getBackgroundUrl(),
+        'closureBg': sectionPage.getEndBackgroundUrl(),
+        'landingMainFields': sectionPage.getLandingFields(LandingPageField.MAINFIELD),
+        'landingSubFields': sectionPage.getLandingFields(LandingPageField.SUBFIELD),
+        'contentPages': sectionPage.getContentPages(),
         'socialNetworks': socialNetworks, 
         'linkedPages': linkedPages,
         'snColSize': snColSize,
         'lpColSize': lpColSize,
     }
-    return render(request, 'index.html', variables)
+    return render(request, template, variables)
 
-def __colSize(elementList, maxColInRow):
-    defaultSize = 12 // maxColInRow
-    listSize = len(elementList)
-    if listSize > 1 and listSize < maxColInRow:
-        return 12 // listSize
-    return defaultSize    
-    
 def about(request):
     title = None
     pageName = None

@@ -1,4 +1,5 @@
 from django.db import models
+import os
 
 # Create your models here.
 class BasicSettings(models.Model):
@@ -69,8 +70,17 @@ class BasePage(models.Model):
         blank = True,
         on_delete=models.SET_NULL
     )
+    
+    @property
+    def full_url(self):
+        return os.path.join(self.url, self.slug)
     def __str__(self):
         return self.title
+    def getBackgroundUrl(self):
+        if self.background is None:
+            return ''
+        return self.background.url
+            
     def GetPage(slugPage):
         return Page.objects.filter( slug = slugPage ).first()
 
@@ -94,6 +104,10 @@ class MainPage(BasePage):
     contentPages = models.ManyToManyField(ContentPage, blank = True, related_name='sub_pages')
     linkedPages = models.ManyToManyField(PageLink, blank = True, related_name='linked_pages')
 
+    def getEndBackgroundUrl(self):
+        if self.endBackground is None:
+            return ''
+        return self.endBackground.url
     def getLandingFields(self, ofType):
         return LandingPageField.objects.filter(mainpage=self, fieldType=ofType)
     def getIconFields(self):

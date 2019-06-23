@@ -357,3 +357,8 @@ h3 {
     color: #000;
     background-color: #f7f7f780;
 }
+
+.errorMessage{
+    text-align: center;
+    font: 1.5em "Lato", sans-serif;
+}
