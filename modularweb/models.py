@@ -26,8 +26,8 @@ class Photography(models.Model):
 class BaseField(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
     name = models.CharField(max_length=50)
-    value = models.CharField(max_length=250)
-    def GetContactFieldValue(fieldSlug):
+    value = models.CharField(max_length=250, null=True, blank=True)
+    def GetBaseFieldValue(fieldSlug):
         field = BaseField.objects.filter(slug = fieldSlug).first()
         if(field is not None):
             return field.value
@@ -52,7 +52,7 @@ class LandingPageField(BaseField):
     def getSubFields():
         return LandingPageField.objects.filter( fieldType = LandingPageField.SUBFIELD ).all()
 
-class ContactField(BaseField):
+class IconField(BaseField):
     faIcon = models.CharField(max_length=50)
     faIconType = models.CharField(max_length=50, default="fab")
     isVisible = models.BooleanField(default=True)
@@ -74,6 +74,12 @@ class BasePage(models.Model):
     def GetPage(slugPage):
         return Page.objects.filter( slug = slugPage ).first()
 
+class PageLink(models.Model):
+    iconField = models.ForeignKey(IconField, on_delete=models.CASCADE)
+    basePage = models.ForeignKey(BasePage, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.basePage.title +" - "+self.iconField.faIcon
+    
 class ContentPage(BasePage):
     body = models.TextField(blank = True)
 
@@ -86,13 +92,12 @@ class MainPage(BasePage):
     )
     fields = models.ManyToManyField(BaseField, blank = True)
     contentPages = models.ManyToManyField(ContentPage, blank = True, related_name='sub_pages')
-    linkedPages = models.ManyToManyField(BasePage, blank = True, related_name='linked_pages')
+    linkedPages = models.ManyToManyField(PageLink, blank = True, related_name='linked_pages')
 
     def getLandingFields(self, ofType):
-        print(ofType)
         return LandingPageField.objects.filter(mainpage=self, fieldType=ofType)
-    def getContactFields(self):
-        return ContactField.objects.filter(mainpage=self)
+    def getIconFields(self):
+        return IconField.objects.filter(mainpage=self)
     def getContentPages(self):
         if self.contentPages.exists():
             return self.contentPages.all()

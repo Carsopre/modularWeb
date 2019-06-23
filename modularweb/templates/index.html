@@ -40,7 +40,7 @@
 <div class="bgimg-1" style="background-image: url({{closureBg}})">
     {% if socialNetworks is not None %}
         <div class="contact-box">     
-            <div class="row content-row">
+            <div class="row content-row justify-content-around">
                 {% for sn in socialNetworks %}
                     <a class="contact
                           col-md-2
@@ -52,26 +52,38 @@
             </div>
         </div>
     {% endif %}
-    <div class="caption-box">
+    <div class="caption-section">
         {% if linkedPages is not None %}
-            <div class="row content-row">
-            {% for linkedPage in linkedPages %}
-                <div class="caption
-                            col-md-5
-                            col-sm-12">
-                    <a href="{{linkedPage.url}}">{{linkedPage.title}}</a>
+            <div class="row content-row justify-content-around">
+            {% for lp in linkedPages %}
+                <div class="caption-wrapper
+                            col-lg-4
+                            col-md-6
+                            col-sm-12
+                            border border-dark
+                            rounded">
+                    <a class="contact" href="{{lp.basePage.url}}" target="_blank">
+                    <div class="row">
+                        <span class="col-12
+                                     {{lp.iconField.faIconType}} fa-{{lp.iconField.faIcon}} fa-3x"></span>
+                        <span class="col-12">
+                            {{lp.basePage.title}}
+                        </span>  
+                    </div>
+                    </a>  
                 </div>
             {% endfor %}
             </div>
         {% endif %}
         
-        <div class="row content-row">
-            <div class="caption
-                        offset-md-2
-                        col-md-8
-                        col-sm-12
-                        col-4">
-                <span>Working on some new fancy features...</span>
+        <div class="row content-row  justify-content-around">
+            <div class="caption-wrapper
+                        border border-dark
+                        rounded
+                        col-lg-8
+                        col-md-10
+                        col-sm-12">
+                <span>Working on yet more features...</span>
             </div>  
         </div>
     </div>

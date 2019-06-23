@@ -3,22 +3,37 @@ from django.shortcuts import render
 from modularweb.models import *
 
 def index(request):
+    
     gallery = Gallery.objects.filter(slug='indexBgs').first()
     homePage = MainPage.objects.filter(slug='home').first()
+    socialNetworks = homePage.getIconFields().filter(isVisible=True).all()
+    linkedPages = homePage.getLinkedPages().filter(iconField__isVisible=True)
+    snColSize = __colSize(socialNetworks, 12)
+    lpColSize = __colSize(linkedPages, 4)
+    
     variables = {
-                'nbar': 'index',
-                'email': ContactPage.GetEmail('indexContact'),
-                'mainBg': homePage.background.url,
-                'closureBg': homePage.endBackground.url,
-                'landingMainFields': homePage.getLandingFields(LandingPageField.MAINFIELD),
-                'landingSubFields': homePage.getLandingFields(LandingPageField.SUBFIELD),
-                'socialNetworks': homePage.getContactFields().filter(isVisible=True).all(), 
-                'contentPages': homePage.getContentPages(),
-                'linkedPages': homePage.getLinkedPages(),
-                'pageName':  BaseField.GetContactFieldValue('pageName'),
-            }
+        'nbar': 'index',
+        'email': ContactPage.GetEmail('indexContact'),
+        'pageName':  BaseField.GetBaseFieldValue('pageName'),
+        'mainBg': homePage.background.url,
+        'closureBg': homePage.endBackground.url,
+        'landingMainFields': homePage.getLandingFields(LandingPageField.MAINFIELD),
+        'landingSubFields': homePage.getLandingFields(LandingPageField.SUBFIELD),
+        'contentPages': homePage.getContentPages(),
+        'socialNetworks': socialNetworks, 
+        'linkedPages': linkedPages,
+        'snColSize': snColSize,
+        'lpColSize': lpColSize,
+    }
     return render(request, 'index.html', variables)
 
+def __colSize(elementList, maxColInRow):
+    defaultSize = 12 // maxColInRow
+    listSize = len(elementList)
+    if listSize > 1 and listSize < maxColInRow:
+        return 12 // listSize
+    return defaultSize    
+    
 def about(request):
     title = None
     pageName = None
