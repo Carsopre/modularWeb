@@ -1,29 +1,54 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
-from modularweb.models import Gallery, ContactPage, Page, GalleryPage, Photography, Fields
+from modularweb.models import *
 
+def __colSize(elementList, maxColInRow):
+    defaultSize = 12 // maxColInRow
+    if elementList is None:
+        return defaultSize
+    listSize = len(elementList)
+    if listSize > 1 and listSize < maxColInRow:
+        return 12 // listSize
+    return defaultSize
+
+def not_found(request, exception):
+    errorMessage = '404. The page you tried to access does not exist.'
+    return section(request, 'home', 'index.html', errorMessage)
+    
 def index(request):
-    gallery = Gallery.objects.filter(slug='indexBgs').first()
+    return section(request, 'home', 'index.html')
+
+def section(request, pageSlug, template='section.html', errorMessage=None):
+    variables = []
+    sectionPage = MainPage.objects.filter(slug=pageSlug).first()
+    if section is None:
+        return render(request, template, variables)
+    
+    socialNetworks = sectionPage.getIconFields()
+    if socialNetworks is not None:
+        socialNetworks = socialNetworks.filter(isVisible=True)
+    snColSize = __colSize(socialNetworks, 12)    
+    
+    linkedPages = sectionPage.getLinkedPages()
+    if linkedPages is not None:
+        linkedPages = linkedPages.filter(iconField__isVisible=True)
+    lpColSize = __colSize(linkedPages, 4)    
+    
     variables = {
-                'nbar': 'index',
-                'pageName':  Fields.GetContactFieldValue('pageName'),
-                'about': Page.objects.filter(slug='indexAbout').first(),
-                'mainBg': Photography.GetPhotographyUrl('mainBg'),
-                'middleBg': Photography.GetPhotographyUrl('middleBg'),
-                'closureBg': Photography.GetPhotographyUrl('closureBg'),
-                'indexText1': Fields.GetContactFieldValue('indexText1'),
-                'indexText2': Fields.GetContactFieldValue('indexText2'),
-                'indexText3': Fields.GetContactFieldValue('indexText3'),
-                'indexText4': Fields.GetContactFieldValue('indexText4'),
-                'indexTextWork': Fields.GetContactFieldValue('indexTextWork'),
-                'linkedin': Fields.GetContactFieldValue('linkedin'),
-                'github': Fields.GetContactFieldValue( 'github'),
-                'email': ContactPage.GetEmail('indexContact'),
-                'facebook': Fields.GetContactFieldValue('facebook'),
-                'flickr': Fields.GetContactFieldValue( 'flickr'),
-                'instagram': Fields.GetContactFieldValue( 'instagram')        
-            }
-    return render(request, 'index.html', variables)
+        'nbar': 'index',
+        'errorMessage': errorMessage,
+        'pageName':  BaseField.GetBaseFieldValue('pageName'),
+        'mainBg': sectionPage.getBackgroundUrl(),
+        'closureBg': sectionPage.getEndBackgroundUrl(),
+        'landingMainFields': sectionPage.getLandingFields(LandingPageField.MAINFIELD),
+        'landingSubFields': sectionPage.getLandingFields(LandingPageField.SUBFIELD),
+        'contentPages': sectionPage.getContentPages(),
+        'socialNetworks': socialNetworks, 
+        'linkedPages': linkedPages,
+        'snColSize': snColSize,
+        'lpColSize': lpColSize,
+    }
+    return render(request, template, variables)
 
 def about(request):
     title = None

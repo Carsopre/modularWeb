@@ -267,31 +267,42 @@ h3 {
     }
 }
 
+/* Content row */
+
+.content-row{
+    margin: 10px 0px;
+    position: relative;
+}
+
 /* Contact box */
 .contact-box{
     color: #333;
     position: absolute;
       
-      top: 0;
-      width: 100%;
+    top: 0;
+    left:0;
+    width: 100%;
     padding:40px 80px;
     text-align: justify;
 }
 
 .contact{
-  color: inherit;
-  text-decoration: inherit;
+    color: inherit;
+    text-decoration: inherit;
+    text-align: center
 }
 
 .contact:link , .contact:visited{
-  color: #000;
-  text-decoration: inherit;
+    color: #000;
+    text-decoration: inherit;
 }
 
 .contact:hover > span {
-  color: #282E34;
-  text-decoration: inherit;
+    color: #282E34;
+    text-decoration: inherit;
 }
+
+/* Text block */
 
 .text-block {
     width: 100%;
@@ -320,25 +331,34 @@ h3 {
 }
 
 /* Caption box */
-.caption span.border {
+.caption-section span.border {
     color: #fff;
-  padding: 18px;
-  font-size: 25px;
-  letter-spacing: 10px;
-  background: #f7f7f780;
+    padding: 18px;
+    font-size: 25px;
+    letter-spacing: 10px;
+    background: #f7f7f780;
 }
 
-.caption{
-  position: absolute;
-  left: 0;
-  top: 50%;
-  text-align: center;
+.caption-section{
+    position: absolute;
+    top: 40%; 
+    left: 5%;
+    width: 90%;
+    padding:40px 80px;
+}
+
+.caption-wrapper{
+    text-align: center;
     letter-spacing: 10px;
-  padding: 18px;
-  font-size: 25px;
+    padding: 18px;
+    font-size: 25px;
     font-weight: 800;
-  letter-spacing: 10px;
+    letter-spacing: 10px;
     color: #000;
     background-color: #f7f7f780;
-    
+}
+
+.errorMessage{
+    text-align: center;
+    font: 1.5em "Lato", sans-serif;
 }

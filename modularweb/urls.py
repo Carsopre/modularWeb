@@ -5,8 +5,6 @@ urlpatterns = [
         url(r'^$', views.index, name='home'),
         url('index', views.index, name='home'),
         url('home', views.index, name='home'),
-        url('aboutus',views.about, name='about'),
-        url('contact', views.contact, name='contact'),
-        url('gallery', views.gallery, name='gallery'),
-        url('blog', views.blog, name='blog'),
+        url(r'^section/(?P<pageSlug>[\w-]+)/$', views.section),
+#        url(r'^404', views.not_found, {'exception': Exception()}),
     ]
