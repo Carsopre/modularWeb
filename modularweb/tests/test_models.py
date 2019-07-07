@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.db import models
+import pytest
 from modularweb.models import Photography, BaseField, LandingPageField, BasePage
 from parameterized import parameterized
 
@@ -309,4 +310,3 @@ class Test_BasePage(TestCase):
         
         # 3. Verify expectations
         self.assertEqual(found_page, expected_page, 'Expected {} but got {}'.format(found_page, expected_page))
-   

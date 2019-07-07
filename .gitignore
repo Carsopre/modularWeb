@@ -7,3 +7,4 @@ etc/secret_key.txt
 .pytest_cache
 **/__pycache__
 mysite/static/
+modularweb/migrations/

@@ -1,7 +1,6 @@
 from django.db import models
 import os
 
-# Create your models here.
 class BasicSettings(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=250)
@@ -61,14 +60,8 @@ class IconField(BaseField):
 class BasePage(models.Model):
     slug = models.SlugField(max_length=25, unique=True)
     title = models.CharField(max_length=50)
-    description = models.CharField(max_length=50, null=True, blank=True)
     url = models.CharField(max_length=50, null = True, blank=True)
-    background = models.ForeignKey(
-        Photography,
-        null = True,
-        blank = True,
-        on_delete=models.SET_NULL
-    )
+    description = models.CharField(max_length=50, null=True, blank=True)
    
     def __str__(self):
         return self.title
@@ -76,56 +69,69 @@ class BasePage(models.Model):
     @property
     def full_url(self):
         return os.path.join(self.url, self.slug)
-
-    def get_background_url(self):
-        if self.background is None:
-            return ''
-        return self.background.url
-            
+          
     def get_page(slugPage):
         return BasePage.objects.filter( slug = slugPage ).first()
 
+
 class PageLink(models.Model):
+    order_link = models.PositiveSmallIntegerField(default = 0)
     iconField = models.ForeignKey(IconField, on_delete=models.CASCADE)
     basePage = models.ForeignKey(BasePage, on_delete=models.CASCADE)
+    
     def __str__(self):
         return self.basePage.title +" - "+self.iconField.faIcon
     
 class ContentPage(BasePage):
-    body = models.TextField(blank = True)
-
-class MainPage(BasePage):
-    endBackground = models.ForeignKey(
+    body = models.TextField(blank = True)   
+    linkedPages = models.ManyToManyField(
+        PageLink, 
+        blank = True, 
+        related_name='linked_pages')
+    fields = models.ManyToManyField(
+        BaseField, 
+        blank = True)
+    
+    background = models.ForeignKey(
         Photography,
         null = True,
         blank = True,
         on_delete=models.SET_NULL
     )
-    fields = models.ManyToManyField(BaseField, blank = True)
-    contentPages = models.ManyToManyField(ContentPage, blank = True, related_name='sub_pages')
-    linkedPages = models.ManyToManyField(PageLink, blank = True, related_name='linked_pages')
 
-    def get_end_background_url(self):
-        if self.endBackground is None:
+    def get_background_url(self):
+        if self.background is None:
             return ''
-        return self.endBackground.url
-    
+        return self.background.url      
+
     def get_landing_fields(self, ofType):
-        return LandingPageField.objects.filter(mainpage=self, fieldType=ofType)
+        return LandingPageField.objects.filter(contentpage=self, fieldType=ofType)
     
     def get_icon_fields(self):
-        return IconField.objects.filter(mainpage=self)
-    
-    def get_content_pages(self):
-        if self.contentPages.exists():
-            return self.contentPages.all()
-        return None
-    
+        return IconField.objects.filter(contentpage=self)
+
     def get_linked_pages(self):
         if self.linkedPages.exists():
             return self.linkedPages.all()
         return None
-    
+
+class MainPage(BasePage):
+    contentPages = models.ManyToManyField(ContentPage, blank = True, related_name='sub_pages')   
+    def get_content_pages(self):
+        main_content_pages = MainContentPage.objects.filter(mainPage = self).all()
+        return [(mcp.pageOrder, mcp.contentPage) for mcp in main_content_pages]
+
+class MainContentPage(models.Model):
+    pageOrder   = models.PositiveSmallIntegerField(default = 0)
+    mainPage    = models.ForeignKey(
+                        MainPage,
+                        on_delete=models.CASCADE)
+    contentPage = models.ForeignKey(
+                        ContentPage,
+                        on_delete=models.CASCADE)
+    def __str__(self):
+        return '({}) - {} - {}'.format(self.pageOrder, self.mainPage.title,self.contentPage.title)
+
 class ContactPage(BasePage):
     content = models.CharField(max_length=50, blank = True)
     email = models.EmailField(blank = True)

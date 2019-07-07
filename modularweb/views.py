@@ -16,39 +16,75 @@ def not_found(request, exception):
     return section(request, 'home', 'index.html', errorMessage)
     
 def index(request):
-    return section(request, 'home', 'index.html')
+    return section(request, 'home')
 
 def section(request, pageSlug, template='section.html', errorMessage=None):
     variables = []
     sectionPage = MainPage.objects.filter(slug=pageSlug).first()
-    if section is None:
+    if sectionPage is None:
         return render(request, template, variables)
-    
-    socialNetworks = sectionPage.get_icon_fields()
-    if socialNetworks is not None:
-        socialNetworks = socialNetworks.filter(isVisible=True)
-    snColSize = __colSize(socialNetworks, 12)    
-    
-    linkedPages = sectionPage.get_linked_pages()
-    if linkedPages is not None:
-        linkedPages = linkedPages.filter(iconField__isVisible=True)
-    lpColSize = __colSize(linkedPages, 4)    
-    
+   
+    content_pages = sectionPage.get_content_pages()
+    section_content_pages = [build_sub_section(contentPage[0], contentPage[1]) for contentPage in sorted(content_pages, key = lambda x : x[0])]
+    # remove top and bottom if existent:
+    top_section = get_section_from_list(section_content_pages, 0)
+    bottom_section = get_section_from_list(section_content_pages, -1)
     variables = {
         'nbar': 'index',
         'errorMessage': errorMessage,
         'pageName':  BaseField.get_base_field_value('pageName'),
-        'mainBg': sectionPage.get_background_url(),
-        'closureBg': sectionPage.get_end_background_url(),
-        'landingMainFields': sectionPage.get_landing_fields(LandingPageField.MAINFIELD),
-        'landingSubFields': sectionPage.get_landing_fields(LandingPageField.SUBFIELD),
-        'contentPages': sectionPage.get_content_pages(),
-        'socialNetworks': socialNetworks, 
-        'linkedPages': linkedPages,
+        'top_section' : top_section,
+        'bottom_section' : bottom_section,
+        'sub_sections': section_content_pages,
+    }
+    return render(request, template, variables)
+
+def get_section_from_list(section_list : list, idx : int):
+    if not section_list:
+        return None
+    if len(section_list) > abs(idx):
+        return section_list.pop(idx)
+    return None
+
+def build_sub_section(pageOrder : int, contentPage : ContentPage):
+    """Creates a dictionary of elements necessary to create a html representation
+    of a ContentPage
+    
+    Arguments:
+        pageOrder {int} -- Order in which the page will be shown.
+        contentPage {ContentPage} -- Query object representing content page
+    
+    Returns:
+        Dictionary -- Dictionary to use in the HTML templates
+    """
+    if contentPage is None:
+        return {}
+    
+    social_networks = contentPage.get_icon_fields()
+    if social_networks is not None:
+        social_networks = social_networks.filter(isVisible=True)
+    snColSize = __colSize(social_networks, 12)    
+    
+    linked_pages = contentPage.get_linked_pages()
+    if linked_pages is not None:
+        linked_pages = linked_pages.filter(iconField__isVisible=True)
+    lpColSize = __colSize(linked_pages, 4)   
+
+    sub_section = {
+        'main_fields': contentPage.get_landing_fields(LandingPageField.MAINFIELD),
+        'sub_fields': contentPage.get_landing_fields(LandingPageField.SUBFIELD),
+        'position': pageOrder,
+        'background': contentPage.background,
+        'body': contentPage.body,
+        'linked_pages' : contentPage.get_linked_pages(),
+        'main_fields': contentPage.get_landing_fields(LandingPageField.MAINFIELD),
+        'sub_fields': contentPage.get_landing_fields(LandingPageField.SUBFIELD),
+        'social_networks': social_networks, 
+        'linked_pages': linked_pages,
         'snColSize': snColSize,
         'lpColSize': lpColSize,
     }
-    return render(request, template, variables)
+    return sub_section    
 
 def about(request):
     title = None
