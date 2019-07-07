@@ -1,1 +1,9 @@
 myenv
+.vscode/launch.json
+.vscode/settings.json
+django_workspace.code-workspace
+db.sqlite3
+etc/secret_key.txt
+.pytest_cache
+**/__pycache__
+mysite/static/
