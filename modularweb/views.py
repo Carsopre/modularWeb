@@ -37,7 +37,7 @@ def section(request, pageSlug, template='section.html', errorMessage=None):
     variables = {
         'nbar': 'index',
         'errorMessage': errorMessage,
-        'pageName':  BaseField.GetBaseFieldValue('pageName'),
+        'pageName':  BaseField.get_base_field_value('pageName'),
         'mainBg': sectionPage.getBackgroundUrl(),
         'closureBg': sectionPage.getEndBackgroundUrl(),
         'landingMainFields': sectionPage.getLandingFields(LandingPageField.MAINFIELD),

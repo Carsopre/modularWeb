@@ -16,10 +16,10 @@ class Photography(models.Model):
     url = models.CharField(max_length=200)
     def __str__(self):
         return self.title
-    def GetPhotography(slugPhoto):
+    def get_photography(slugPhoto):
         return Photography.objects.filter( slug = slugPhoto ).first()
-    def GetPhotographyUrl(slugPhoto):
-        photo = Photography.GetPhotography(slugPhoto)
+    def get_photography_url(slugPhoto):
+        photo = Photography.get_photography(slugPhoto)
         if( photo is None):
             return ""
         return photo.url
@@ -28,7 +28,7 @@ class BaseField(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
     name = models.CharField(max_length=50)
     value = models.CharField(max_length=250, null=True, blank=True)
-    def GetBaseFieldValue(fieldSlug):
+    def get_base_field_value(fieldSlug):
         field = BaseField.objects.filter(slug = fieldSlug).first()
         if field is not None:
             return field.value
@@ -48,16 +48,15 @@ class LandingPageField(BaseField):
         choices=FIELD_TYPES,
         default=MAINFIELD,
     )
-    def getMainFields():
+    def get_main_fields():
         return LandingPageField.objects.filter( fieldType = LandingPageField.MAINFIELD ).all()
-    def getSubFields():
+    def get_sub_fields():
         return LandingPageField.objects.filter( fieldType = LandingPageField.SUBFIELD ).all()
 
 class IconField(BaseField):
     faIcon = models.CharField(max_length=50)
     faIconType = models.CharField(max_length=50, default="fab")
     isVisible = models.BooleanField(default=True)
-
 
 class BasePage(models.Model):
     slug = models.SlugField(max_length=25, unique=True)
