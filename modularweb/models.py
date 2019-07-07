@@ -30,7 +30,7 @@ class BaseField(models.Model):
     value = models.CharField(max_length=250, null=True, blank=True)
     def GetBaseFieldValue(fieldSlug):
         field = BaseField.objects.filter(slug = fieldSlug).first()
-        if(field is not None):
+        if field is not None:
             return field.value
         return ""
     def __str__(self):
