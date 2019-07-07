@@ -24,12 +24,12 @@ def section(request, pageSlug, template='section.html', errorMessage=None):
     if section is None:
         return render(request, template, variables)
     
-    socialNetworks = sectionPage.getIconFields()
+    socialNetworks = sectionPage.get_icon_fields()
     if socialNetworks is not None:
         socialNetworks = socialNetworks.filter(isVisible=True)
     snColSize = __colSize(socialNetworks, 12)    
     
-    linkedPages = sectionPage.getLinkedPages()
+    linkedPages = sectionPage.get_linked_pages()
     if linkedPages is not None:
         linkedPages = linkedPages.filter(iconField__isVisible=True)
     lpColSize = __colSize(linkedPages, 4)    
@@ -38,11 +38,11 @@ def section(request, pageSlug, template='section.html', errorMessage=None):
         'nbar': 'index',
         'errorMessage': errorMessage,
         'pageName':  BaseField.get_base_field_value('pageName'),
-        'mainBg': sectionPage.getBackgroundUrl(),
-        'closureBg': sectionPage.getEndBackgroundUrl(),
-        'landingMainFields': sectionPage.getLandingFields(LandingPageField.MAINFIELD),
-        'landingSubFields': sectionPage.getLandingFields(LandingPageField.SUBFIELD),
-        'contentPages': sectionPage.getContentPages(),
+        'mainBg': sectionPage.get_background_url(),
+        'closureBg': sectionPage.get_end_background_url(),
+        'landingMainFields': sectionPage.get_landing_fields(LandingPageField.MAINFIELD),
+        'landingSubFields': sectionPage.get_landing_fields(LandingPageField.SUBFIELD),
+        'contentPages': sectionPage.get_content_pages(),
         'socialNetworks': socialNetworks, 
         'linkedPages': linkedPages,
         'snColSize': snColSize,
@@ -53,7 +53,7 @@ def section(request, pageSlug, template='section.html', errorMessage=None):
 def about(request):
     title = None
     pageName = None
-    loadedAbout = Page.GetPage('aboutus')
+    loadedAbout = BasePage.get_page('aboutus')
     if(loadedAbout is not None):
         title = loadedAbout.title
         pageName = loadedAbout.pageName
@@ -105,7 +105,7 @@ def blog(request):
     title = None
     pageName = None
     body = None
-    blog = Page.GetPage('blogPage')
+    blog = BasePage.get_page('blogPage')
     if(blog is not None):
         title = blog.title
         pageName = blog.pageName

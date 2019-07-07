@@ -69,19 +69,21 @@ class BasePage(models.Model):
         blank = True,
         on_delete=models.SET_NULL
     )
-    
+   
+    def __str__(self):
+        return self.title
+
     @property
     def full_url(self):
         return os.path.join(self.url, self.slug)
-    def __str__(self):
-        return self.title
-    def getBackgroundUrl(self):
+
+    def get_background_url(self):
         if self.background is None:
             return ''
         return self.background.url
             
-    def GetPage(slugPage):
-        return Page.objects.filter( slug = slugPage ).first()
+    def get_page(slugPage):
+        return BasePage.objects.filter( slug = slugPage ).first()
 
 class PageLink(models.Model):
     iconField = models.ForeignKey(IconField, on_delete=models.CASCADE)
@@ -103,19 +105,23 @@ class MainPage(BasePage):
     contentPages = models.ManyToManyField(ContentPage, blank = True, related_name='sub_pages')
     linkedPages = models.ManyToManyField(PageLink, blank = True, related_name='linked_pages')
 
-    def getEndBackgroundUrl(self):
+    def get_end_background_url(self):
         if self.endBackground is None:
             return ''
         return self.endBackground.url
-    def getLandingFields(self, ofType):
+    
+    def get_landing_fields(self, ofType):
         return LandingPageField.objects.filter(mainpage=self, fieldType=ofType)
-    def getIconFields(self):
+    
+    def get_icon_fields(self):
         return IconField.objects.filter(mainpage=self)
-    def getContentPages(self):
+    
+    def get_content_pages(self):
         if self.contentPages.exists():
             return self.contentPages.all()
         return None
-    def getLinkedPages(self):
+    
+    def get_linked_pages(self):
         if self.linkedPages.exists():
             return self.linkedPages.all()
         return None
