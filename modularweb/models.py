@@ -1,4 +1,5 @@
 from django.db import models
+from polymorphic.models import PolymorphicModel
 import os
 
 
@@ -74,7 +75,7 @@ class IconField(BaseField):
     isVisible = models.BooleanField(default=True)
 
 
-class BasePage(models.Model):
+class BasePage(PolymorphicModel):
     slug = models.SlugField(max_length=25, unique=True)
     title = models.CharField(max_length=50)
     url = models.CharField(max_length=50, null=True, blank=True)
@@ -140,20 +141,16 @@ class ContentPage(BasePage):
         return None
 
     def get_library_list(self):
-        print(self.linkedPages)
-        linked_pages = self.linkedPages.objects.all()
+        linked_pages = self.get_linked_pages()
         if not linked_pages:
             return
-        # subset = [
-        #     page_link
-        #     for page_link in linked_pages
-        #     if isinstance(page_link.basePage, LibraryPage)]
-        for page_link in linked_pages:
-            print(type(page_link.basePage))
-            print(LibraryPage)
-            print(issubclass(type(page_link.basePage), LibraryPage))
 
-        return None
+        subset = [
+            page_link
+            for page_link in linked_pages
+            if isinstance(page_link.basePage, LibraryPage)]
+
+        return subset
 
 
 class LibraryEntry(models.Model):
