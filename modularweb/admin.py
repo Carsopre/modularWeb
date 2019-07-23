@@ -2,7 +2,7 @@ from django.contrib import admin
 from modularweb.models import *
 
 # Register your models here.
-
+admin.site.register(BasePage)
 admin.site.register(BasicSettings)
 admin.site.register(BaseField)
 admin.site.register(IconField)
