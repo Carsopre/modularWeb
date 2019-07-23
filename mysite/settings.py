@@ -24,7 +24,8 @@ with open('./etc/secret_key.txt') as f:
     SECRET_KEY = f.read().strip
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+with open('./etc/debug_mode.txt') as f:
+    DEBUG = f.read().strip
 
 ALLOWED_HOSTS = [
     '188.226.16.239',
