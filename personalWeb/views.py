@@ -15,52 +15,65 @@ def __colSize(elementList, maxColInRow):
 
 def not_found(request, exception):
     errorMessage = '404. The page you tried to access does not exist.'
-    return render_scaffold(request, 'home', 'index.html', errorMessage)
+    return render_page(request, 'home', 'index.html', errorMessage)
 
 
 def index(request):
-    return render_scaffold(request, 'home')
+    return render_page(request, 'home')
 
 
-def render_scaffold(
-        request, pageSlug, template='scaffold.html', errorMessage=None):
-    variables = {}
-    scaffold_page = ScaffoldPage.get_page(slug_page=pageSlug)
-    if scaffold_page is None:
-        # To do should be returning 404 not found.
-        return render(request, template, variables)
+def render_page(
+        request, pageSlug, template='index.html', errorMessage=None):
+    breadcrumbs = None
+    title = None
 
-    content_pages = scaffold_page.get_content_pages()
-    section_content_pages = [
-        get_section(contentPage[0], contentPage[1])
-        for contentPage in sorted(
-            content_pages,
-            key=lambda x: x[0])]
+    section = get_content(pageSlug)
+    if section:
+        title = section.get('title')
+
     variables = {
         'nbar': 'index',
         'errorMessage': errorMessage,
-        'page_name':  scaffold_page.title,
-        'scaffold_sections': section_content_pages,
+        'page_name':  title,
+        'breadcrumbs': breadcrumbs,
+        'section': section,
     }
+
+    print(template, section)
     return render(request, template, variables)
 
 
-def render_section(
-        request, pageSlug, template='section.html', errorMessage=None):
-    pass
+def get_content(page_slug):
+    flex_page = FlexiblePage.get_page(page_slug)
+    if flex_page:
+        return __get_section(0, flex_page)
+
+    scaffold_page = ScaffoldPage.get_page(page_slug)
+    return __get_scaffold(scaffold_page)
 
 
-def get_section(page_order: int, content_page: ContentPage):
-    """Creates a dictionary of elements necessary to create a html representation
-    of a ContentPage
+def __get_scaffold(scaffold_page: ScaffoldPage):
+    if scaffold_page is None:
+        # To do should be returning 404 not found.
+        return None
 
-    Arguments:
-        page_order {int} -- Order in which the page will be shown.
-        content_page {ContentPage} -- Query object representing content page
+    content_pages = scaffold_page.get_content_pages()
+    section_content_pages = [
+        __get_section(contentPage[0], contentPage[1])
+        for contentPage in sorted(
+            content_pages,
+            key=lambda x: x[0])]
+    scaffold = {
+        'template': 'section_scaffold.html',
+        'title': scaffold_page.title,
+        'slug': scaffold_page.slug,
+        'data': section_content_pages,
+    }
 
-    Returns:
-        Dictionary -- Dictionary to use in the HTML templates
-    """
+    return scaffold
+
+
+def __get_section(page_order: int, content_page: ContentPage):
     if content_page is None:
         return {}
 
@@ -80,6 +93,7 @@ def get_section(page_order: int, content_page: ContentPage):
     section = {
         'template': template,
         'data': variables,
+        'title': content_page.title,
     }
 
     return section

@@ -4,30 +4,40 @@ import os
 
 
 class FlexiblePage(PolymorphicModel):
-    slug = models.SlugField(max_length=25, unique=True)
-    title = models.CharField(max_length=50)
+    slug = models.SlugField(
+        max_length=25,
+        unique=True)
+    title = models.CharField(
+        max_length=50)
 
     def __str__(self):
         return self.title
 
     def get_page(slug_page):
-        return FlexiblePage.objects.filter(slug=slug_page).first()
+        return FlexiblePage.objects.filter(
+            slug=slug_page).first()
 
 
 class ScaffoldPage(models.Model):
-    slug = models.SlugField(max_length=25, unique=True)
-    title = models.CharField(max_length=50)
+    slug = models.SlugField(
+        max_length=25,
+        unique=True)
+    title = models.CharField(
+        max_length=50)
 
     def __str__(self):
         return self.title
 
     def get_page(slug_page):
-        return ScaffoldPage.objects.filter(slug=slug_page).first()
+        return ScaffoldPage.objects.filter(
+            slug=slug_page).first()
 
     def get_content_pages(self):
         content_pages = CompositePage.objects.filter(
             scaffold_page=self).all()
-        return [(mcp.page_order, mcp.content_page) for mcp in content_pages]
+        return [
+            (mcp.page_order, mcp.content_page)
+            for mcp in content_pages]
 
 
 class CompositePage(models.Model):
