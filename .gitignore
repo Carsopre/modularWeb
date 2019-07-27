@@ -1,10 +1,9 @@
 myenv
-.vscode/launch.json
-.vscode/settings.json
+.vscode/**
 django_workspace.code-workspace
 db.sqlite3
 etc/
 .pytest_cache
 **/__pycache__
-modularweb/static/
-modularweb/migrations/
+modularWeb/static/
+modularWeb/migrations/
