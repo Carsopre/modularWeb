@@ -6,5 +6,5 @@ db.sqlite3
 etc/
 .pytest_cache
 **/__pycache__
-mysite/static/
+modularweb/static/
 modularweb/migrations/
