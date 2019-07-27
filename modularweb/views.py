@@ -22,148 +22,68 @@ def index(request):
     return section(request, 'home')
 
 
+def main_view(request, pageSlug, template='section.html', errorMessage=None):
+    variables = []
+    scaffold_page = ScaffoldPage.objects.filter(
+        slug=pageSlug
+    ).first()
+    if scaffold_page is None:
+        # to-do should be returning error message not found
+        return not_found(request, None)
+
+
 def section(request, pageSlug, template='section.html', errorMessage=None):
     variables = []
-    sectionPage = MainPage.objects.filter(slug=pageSlug).first()
-    if sectionPage is None:
-        return render(request, template, variables)
+    # Assume scaffold page for now
+    section_page = ScaffoldPage.objects.filter(
+        slug=pageSlug
+    ).first()
 
-    content_pages = sectionPage.get_content_pages()
-    section_content_pages = [
-        build_sub_section(contentPage[0], contentPage[1])
+    if section_page is None:
+        # to-do should be returning error message not found
+        return not_found(request, None)
+
+    content_pages = section_page.get_content_pages()
+    section_list = [
+        get_section(contentPage[0], contentPage[1])
         for contentPage in sorted(
             content_pages,
             key=lambda x: x[0])]
-    # remove top and bottom if existent:
-    top_section = get_section_from_list(section_content_pages, 0)
-    bottom_section = get_section_from_list(section_content_pages, -1)
+
     variables = {
         'nbar': 'index',
         'errorMessage': errorMessage,
-        'pageName':  BaseField.get_base_field_value('pageName'),
-        'top_section': top_section,
-        'bottom_section': bottom_section,
-        'sub_sections': section_content_pages,
+        'pageName':  section_page.title,
+        'section_list': section_list,
     }
-    return render(request, template, variables)
+
+    return render(request, 'main_page.html', variables)
 
 
-def get_section_from_list(section_list: list, idx: int):
-    if not section_list:
-        return None
-    if len(section_list) > abs(idx):
-        return section_list.pop(idx)
-    return None
-
-
-def build_sub_section(pageOrder: int, contentPage: ContentPage):
+def get_section(pageOrder: int, sectionPage: BasePage):
     """Creates a dictionary of elements necessary to create a html representation
-    of a ContentPage
+    of a BasePage
 
     Arguments:
         pageOrder {int} -- Order in which the page will be shown.
-        contentPage {ContentPage} -- Query object representing content page
+        basePage {BasePage} -- Query object representing content page
 
     Returns:
         Dictionary -- Dictionary to use in the HTML templates
     """
-    if contentPage is None:
+    if sectionPage is None:
         return {}
 
-    social_networks = contentPage.get_icon_fields()
-    if social_networks is not None:
-        social_networks = social_networks.filter(isVisible=True)
-    snColSize = __colSize(social_networks, 12)
-
-    linked_pages = contentPage.get_linked_pages()
-    if linked_pages is not None:
-        linked_pages = linked_pages.filter(iconField__isVisible=True)
-    lpColSize = __colSize(linked_pages, 4)
-
-    sub_section = {
-        'main_fields': contentPage.get_landing_fields(
-            LandingPageField.MAINFIELD),
-        'sub_fields': contentPage.get_landing_fields(
-            LandingPageField.SUBFIELD),
+    section_data = {
         'position': pageOrder,
-        'background': contentPage.background,
-        'body': contentPage.body,
-        'linked_pages': contentPage.get_linked_pages(),
-        'social_networks': social_networks,
-        'linked_pages': linked_pages,
-        'snColSize': snColSize,
-        'lpColSize': lpColSize,
+        'slug': sectionPage.slug,
+        'title': sectionPage.title,
+        'url': sectionPage.url,
+        'background': sectionPage.background,
     }
-    return sub_section
+    section_template = 'section_basic.html'
 
-
-def about(request):
-    title = None
-    pageName = None
-    loadedAbout = BasePage.get_page('aboutus')
-    if(loadedAbout is not None):
-        title = loadedAbout.title
-        pageName = loadedAbout.pageName
-    variables = {
-        'title': title,
-        'pageName': pageName,
-        'nbar': 'about',
+    return {
+        'template': section_template,
+        'data': section_data
     }
-    return render(request, 'aboutus.html', variables)
-
-
-def contact(request):
-    title = None
-    pageName = None
-    # We assume we only load one contact (the latest one)
-    loadedContact = ContactPage.objects.last()
-    if(loadedContact is not None):
-        title = loadedContact.title
-        pageName = loadedContact.pageName
-
-    variables = {
-        'title': title,
-        'pageName': pageName,
-        'nbar': 'contact',
-        'contact': loadedContact
-    }
-    return render(request, 'contact.html', variables)
-
-
-def gallery(request):
-    title = None
-    pageName = None
-    galleryPhotos = None
-    # We assume we only load one gallery (the latest one)
-    loadedGallery = GalleryPage.objects.last()
-    if(loadedGallery is not None):
-        galleryPhotos = loadedGallery.getGalleryPhotographies
-        title = loadedGallery.title
-        pageName = loadedGallery.pageName
-
-    variables = {
-        'title': title,
-        'pageName': pageName,
-        'nbar': 'gallery',
-        'gallery': loadedGallery,
-        'galleryPhotos': galleryPhotos
-    }
-    return render(request, 'gallery.html', variables)
-
-
-def blog(request):
-    title = None
-    pageName = None
-    body = None
-    blog = BasePage.get_page('blogPage')
-    if(blog is not None):
-        title = blog.title
-        pageName = blog.pageName
-
-    variables = {
-        'title': title,
-        'pageName': pageName,
-        'nbar': 'content',
-        'blog': blog
-    }
-    return render(request, 'blog.html', variables)

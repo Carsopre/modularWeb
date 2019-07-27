@@ -1,0 +1,14 @@
+<div style="position:relative;">
+    <div class="row text-block" >
+        <div class="col col-md-8 offset-md-2">
+            <p>
+                <h3>{{section.title}}</h3>
+                {{section.body | safe}}
+            </p>
+        </div>
+    </div>
+</div>
+{{ section.background }}
+<div class="bgimg-2"  style="background-image: url({{ section.background.url }})">
+    <div class="main-page-scroll-down-sign" title="Go to content"></div>
+</div>
