@@ -1,0 +1,18 @@
+{% if section_data %}
+    <div class="bgimg-1" style="background-image: url({{ section_data.background }})">    
+        <div class="main-page-text">
+        {% if section_data.main_fields is not None %}
+            {% for main_field in section_data.main_fields %}
+                <h2>{{main_field}}</h2>
+            {% endfor %}
+        {% endif %}
+        {% if section_data.sub_fields is not None %}
+            <br>
+            {% for sub_field in section_data.sub_fields %}
+                <h3>{{sub_field}}</h3>
+            {% endfor %}
+        {% endif %}
+        </div>
+        <div class="main-page-scroll-down-sign" title="Go to content"></div>
+    </div>
+{% endif %}

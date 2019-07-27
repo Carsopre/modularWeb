@@ -1,0 +1,13 @@
+{% load staticfiles %}
+<html lang="en">
+{% include "header.html" %}
+<body>
+
+{% for section in scaffold_sections %}
+    {% if section.template and section.data %}
+        {% include section.template with section_data=section.data %}
+    {% endif %}
+{% endfor %}
+<!--    {% include "footer.html" %}-->
+  </body>
+</html>

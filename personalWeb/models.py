@@ -10,8 +10,8 @@ class FlexiblePage(PolymorphicModel):
     def __str__(self):
         return self.title
 
-    def get_page(slugPage):
-        return FlexiblePage.objects.filter(slug=slugPage).first()
+    def get_page(slug_page):
+        return FlexiblePage.objects.filter(slug=slug_page).first()
 
 
 class ScaffoldPage(models.Model):
@@ -21,10 +21,13 @@ class ScaffoldPage(models.Model):
     def __str__(self):
         return self.title
 
+    def get_page(slug_page):
+        return ScaffoldPage.objects.filter(slug=slug_page).first()
+
     def get_content_pages(self):
-        return CompositePage.objects.filter(
-            scaffold_page=self
-        ).all()
+        content_pages = CompositePage.objects.filter(
+            scaffold_page=self).all()
+        return [(mcp.page_order, mcp.content_page) for mcp in content_pages]
 
 
 class CompositePage(models.Model):
@@ -112,6 +115,17 @@ class InternalLink(PageLink):
         on_delete=models.CASCADE)
 
 
+class ContentPageType(models.Model):
+    INTRO_PAGE = 'IP'
+    BLOG_PAGE = 'BP'
+    OUTRO_PAGE = 'OP'
+    FIELD_TYPES = [
+        (INTRO_PAGE, 'Intro page.'),
+        (BLOG_PAGE, 'Blog page'),
+        (OUTRO_PAGE, 'Outro page'),
+    ]
+
+
 class ContentPage(FlexiblePage):
     body = models.TextField(blank=True)
     linkedPages = models.ManyToManyField(
@@ -122,6 +136,12 @@ class ContentPage(FlexiblePage):
         BaseField,
         blank=True)
 
+    page_type = models.CharField(
+        max_length=2,
+        choices=ContentPageType.FIELD_TYPES,
+        default=ContentPageType.INTRO_PAGE,
+    )
+
     background = models.ForeignKey(
         MediaImage,
         null=True,
@@ -129,10 +149,11 @@ class ContentPage(FlexiblePage):
         on_delete=models.SET_NULL
     )
 
-    def get_background_url(self):
+    @property
+    def background_url(self):
         if self.background is None:
             return ''
-        return self.background.url
+        return self.background.img.url
 
     def get_landing_fields(self, ofType):
         return LandingPageField.objects.filter(

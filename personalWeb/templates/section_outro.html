@@ -1,0 +1,42 @@
+{% if section_data %}
+    <div class="bgimg-1" style="background-image: url({{ section_data.background }})">
+        {% if external_links %}
+            <div class="contact-box">     
+                <div class="row content-row justify-content-around">
+                    {% for sn in section_data.external_links %}
+                        <a class="contact
+                            col-md-2
+                            col-sm-4 
+                            col-6" href="{{sn.value}}" target="_blank">
+                            <span class="{{sn.faIconType}} fa-{{sn.faIcon}} fa-5x"></span>  
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        <div class="caption-section">
+            {% if section_data.internal_links %}
+                <div class="row content-row justify-content-around">
+                {% for lp in section_data.internal_links %}
+                    <div class="caption-wrapper
+                                col-lg-4
+                                col-md-6
+                                col-sm-12
+                                border border-dark
+                                rounded">
+                        <a class="contact" href="{{lp.basePage.full_url}}">
+                        <div class="row">
+                            <span class="col-12
+                                        {{lp.iconField.faIconType}} fa-{{lp.iconField.faIcon}} fa-3x"></span>
+                            <span class="col-12">
+                                {{lp.basePage.title}}
+                            </span>  
+                        </div>
+                        </a>  
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif%}
