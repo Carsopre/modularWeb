@@ -71,6 +71,10 @@ def get_section(page_order: int, content_page: ContentPage):
         'slug': content_page.slug,
         'body': content_page.body,
         'background': content_page.background_url,
+        'main_fields': content_page.main_fields,
+        'sub_fields': content_page.sub_fields,
+        'internal_links': content_page.internal_links,
+        'external_links': content_page.external_links,
     }
 
     section = {
@@ -79,6 +83,7 @@ def get_section(page_order: int, content_page: ContentPage):
     }
 
     return section
+
 
 __section_template_map = {
     ContentPageType.INTRO_PAGE: 'section_intro.html',

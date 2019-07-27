@@ -1,11 +1,16 @@
 myenv
 .vscode/**
 django_workspace.code-workspace
-db.sqlite3
-etc/
-.pytest_cache
-**/__pycache__
-modularWeb/static/
 
+**/__pycache__
+.pytest_cache
+
+db.sqlite3
+
+
+modularWeb/static/
 personalWeb/migrations/
+
+fixtures/
+etc/
 media/

@@ -155,27 +155,36 @@ class ContentPage(FlexiblePage):
             return ''
         return self.background.img.url
 
-    def get_landing_fields(self, ofType):
+    @property
+    def main_fields(self):
+        return self.__get_landing_fields(
+            ofType=LandingPageField.MAINFIELD)
+
+    @property
+    def sub_fields(self):
+        return self.__get_landing_fields(
+            ofType=LandingPageField.SUBFIELD)
+
+    @property
+    def internal_links(self):
+        return [
+            lp
+            for lp in self.linkedPages.all()
+            if isinstance(lp, InternalLink)]
+
+    @property
+    def external_links(self):
+        return [
+            lp
+            for lp in self.linkedPages.all()
+            if not isinstance(lp, InternalLink)]
+
+    def __get_landing_fields(self, ofType):
         return LandingPageField.objects.filter(
             contentpage=self,
             fieldType=ofType)
-
-    def get_icon_fields(self):
-        return IconField.objects.filter(contentpage=self)
 
     def get_linked_pages(self):
         if self.linkedPages.exists():
             return self.linkedPages.all()
         return None
-
-    def get_library_list(self):
-        linked_pages = self.get_linked_pages()
-        if not linked_pages:
-            return
-
-        subset = [
-            page_link
-            for page_link in linked_pages
-            if isinstance(page_link.basePage, LibraryPage)]
-
-        return subset
