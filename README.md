@@ -4,9 +4,10 @@ Framework: Django, Bootstrap
 Code: Python, HTML, CSS.
 
 ## Authors
-Ahuir Domínguez, Víctor
-
 Soriano Pérez, Carles S.
+
+## CoAuthor
+Ahuir Domínguez, Víctor
 
 ## Description
 A simple web App that allows anyone to create their own web page, either for commercial or personal use. 

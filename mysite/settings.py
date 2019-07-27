@@ -27,16 +27,11 @@ with open('./etc/secret_key.txt') as f:
 with open('./etc/debug_mode.txt') as f:
     DEBUG = f.read().strip
 
-ALLOWED_HOSTS = [
-    '188.226.16.239',
-    '188.226.16.239:8000',
-    'carlessoriano.com',
-    'localhost',
-    '127.0.0.1']
+with open('./etc/allowed_hosts.txt') as f:
+    ALLOWED_HOSTS = f.read().strip
 
 
 # Application definition
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
