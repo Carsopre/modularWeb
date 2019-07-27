@@ -6,4 +6,6 @@ etc/
 .pytest_cache
 **/__pycache__
 modularWeb/static/
-modularWeb/migrations/
+
+personalWeb/migrations/
+media/

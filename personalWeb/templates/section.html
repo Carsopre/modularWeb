@@ -1,0 +1,88 @@
+{% load staticfiles %}
+<html lang="en">
+{% include "header.html" %}
+<body>
+
+{% if top_section is not None %}
+    <div class="bgimg-1" style="background-image: url({% static top_section.background.url %})">    
+        <div class="main-page-text">
+        {% if top_section.main_fields is not None %}
+            {% for main_field in top_section.main_fields %}
+                <h2>{{main_field}}</h2>
+            {% endfor %}
+        {% endif %}
+        {% if top_section.sub_fields is not None %}
+            <br>
+            {% for sub_field in top_section.sub_fields %}
+                <h3>{{sub_field}}</h3>
+            {% endfor %}
+        {% endif %}
+        </div>
+        <div class="main-page-scroll-down-sign" title="Go to content"></div>
+    </div>
+{% endif %}
+
+{% if sub_sections is not None %}
+    {% for sub_section in sub_sections %}
+        <div style="position:relative;">
+            <div class="row text-block" >
+              <div class="col col-md-8 offset-md-2">
+                  <p>
+                      <h3>{{sub_section.title}}</h3>
+                        {{sub_section.body | safe}}
+                  </p>
+              </div>
+            </div>
+        </div>
+
+        <div class="bgimg-2"  style="background-image: url({% static sub_section.background.url %})">
+            <div class="main-page-scroll-down-sign" title="Go to content"></div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if bottom_section is not None %}
+    <div class="bgimg-1" style="background-image: url({% static bottom_section.background.url %})">
+        {% if bottom_section.social_networks is not None %}
+            <div class="contact-box">     
+                <div class="row content-row justify-content-around">
+                    {% for sn in bottom_section.social_networks %}
+                        <a class="contact
+                            col-md-2
+                            col-sm-4 
+                            col-6" href="{{sn.value}}" target="_blank">
+                            <span class="{{sn.faIconType}} fa-{{sn.faIcon}} fa-5x"></span>  
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        <div class="caption-section">
+            {% if bottom_section.linked_pages is not None %}
+                <div class="row content-row justify-content-around">
+                {% for lp in bottom_section.linked_pages %}
+                    <div class="caption-wrapper
+                                col-lg-4
+                                col-md-6
+                                col-sm-12
+                                border border-dark
+                                rounded">
+                        <a class="contact" href="{{lp.basePage.full_url}}">
+                        <div class="row">
+                            <span class="col-12
+                                        {{lp.iconField.faIconType}} fa-{{lp.iconField.faIcon}} fa-3x"></span>
+                            <span class="col-12">
+                                {{lp.basePage.title}}
+                            </span>  
+                        </div>
+                        </a>  
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif%}
+<!--    {% include "footer.html" %}-->
+  </body>
+</html>
