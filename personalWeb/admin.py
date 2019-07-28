@@ -60,4 +60,3 @@ class BaseFieldAdmin(PolymorphicParentModelAdmin):
     base_model = BaseField  # Optional, explicitly set here.
     child_models = (PageLink, LandingPageField)
     list_filter = (PolymorphicChildModelFilter,)  # This is optional.
-    show_in_index = False

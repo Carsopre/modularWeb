@@ -101,6 +101,13 @@ class FlexiblePage(models.Model):
             return ''
         return self.background.img.url
 
+    def __get_landing_fields(self, of_type):
+        return [
+            lp
+            for lp in self.fields.all()
+            if isinstance(lp, LandingPageField) and
+            lp.field_type == of_type]
+
     @property
     def main_fields(self):
         return self.__get_landing_fields(
@@ -114,18 +121,18 @@ class FlexiblePage(models.Model):
     @property
     def internal_links(self):
         return [
-            lp.internal_link
+            lp
             for lp in self.fields.all()
-            if isinstance(lp.tofield, PageLink) and
-            lp.to_field.internal_link]
+            if isinstance(lp, PageLink) and
+            lp.internal_link]
 
     @property
     def external_links(self):
         return [
-            lp.internal_link
+            lp
             for lp in self.fields.all()
-            if isinstance(lp.tofield, PageLink) and
-            not lp.to_field.internal_link]
+            if isinstance(lp, PageLink) and
+            not lp.internal_link]
 
 
 class BaseField(PolymorphicModel):

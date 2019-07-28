@@ -39,7 +39,6 @@ def render_page(
         'section': section,
     }
 
-    print(template, section)
     return render(request, template, variables)
 
 
