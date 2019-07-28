@@ -1,14 +1,14 @@
 {% if section_data %}
     <div class="bgimg-1" style="background-image: url({{ section_data.background }})">
-        {% if section_data.external_links %}
+        {% if section_data.libraries %}
             <div class="contact-box">     
                 <div class="row content-row justify-content-around">
-                    {% for sn in section_data.external_links %}
+                    {% for entry in section_data.libraries.0.1.dict_values %}
                         <a class="contact
                             col-md-2
                             col-sm-4 
-                            col-6" href="{{sn.text_value}}" target="_blank">
-                            <span class="{{sn.icon_field.faIconType}} fa-{{sn.icon_field.faIcon}} fa-5x"></span>  
+                            col-6" href="{{entry.text_value}}" target="_blank">
+                            <span class="{{entry.icon_field.faIconType}} fa-{{entry.icon_field.faIcon}} fa-5x"></span>
                         </a>
                     {% endfor %}
                 </div>
@@ -44,7 +44,7 @@
                                 col-lg-8
                                 col-md-10
                                 col-sm-12">
-                        <span>{{section_data.body}}</span>
+                        <span>{{section_data.outro_text}}</span>
                     </div>  
                 </div>
             {% endif %}

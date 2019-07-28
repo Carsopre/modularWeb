@@ -43,12 +43,10 @@ def render_page(
 
 
 def get_content(page_slug):
-    flex_page = FlexiblePage.get_page(page_slug)
-    if flex_page:
-        return __get_section(0, flex_page)
-
-    scaffold_page = ScaffoldPage.get_page(page_slug)
-    return __get_scaffold(scaffold_page)
+    base_page = BasePage.get_page(page_slug)
+    if(isinstance(base_page, ScaffoldPage)):
+        return __get_scaffold(base_page)
+    return __get_section(0, base_page)
 
 
 def __get_scaffold(scaffold_page: ScaffoldPage):
@@ -76,19 +74,9 @@ def __get_section(page_order: int, content_page: FlexiblePage):
     if content_page is None:
         return {}
 
-    template = __section_template_map.get(content_page.page_type)
-    variables = {
-        'position': page_order,
-        'title': content_page.title,
-        'slug': content_page.slug,
-        'body': content_page.body,
-        'background': content_page.background_url,
-        'main_fields': content_page.main_fields,
-        'sub_fields': content_page.sub_fields,
-        'internal_links': content_page.internal_links,
-        'external_links': content_page.external_links,
-    }
-
+    template = __section_template_map.get(type(content_page))
+    variables = content_page.get_property_dict()
+    variables['position'] = page_order
     section = {
         'template': template,
         'data': variables,
@@ -99,7 +87,7 @@ def __get_section(page_order: int, content_page: FlexiblePage):
 
 
 __section_template_map = {
-    ContentPageType.INTRO_PAGE: 'section_intro.html',
-    ContentPageType.BLOG_PAGE: 'section_blog.html',
-    ContentPageType.OUTRO_PAGE: 'section_outro.html',
+    IntroPage: 'section_intro.html',
+    BlogPage: 'section_blog.html',
+    OutroPage: 'section_outro.html',
 }
