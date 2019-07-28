@@ -73,7 +73,7 @@ def __get_scaffold(scaffold_page: ScaffoldPage):
     return scaffold
 
 
-def __get_section(page_order: int, content_page: ContentPage):
+def __get_section(page_order: int, content_page: FlexiblePage):
     if content_page is None:
         return {}
 
