@@ -1,7 +1,7 @@
 The best option to install packages is to use a virtualenv
 http://virtualenvwrapper.readthedocs.io/en/latest/index.html
-> mkvirtualenv --python=python3 modularweb
-> workon modularweb
+> mkvirtualenv --python=python3 <<appName>>
+> workon <<appName>>
 
 1. Install python 3.6, (3.7 has some issues with Django)
 
@@ -26,5 +26,5 @@ Note: Make sure the admin user is set.
 5.4. python manage.py runserver
 
 For renewing the fixture:
-python manage.py dumpdata > \modularweb\fixtures\initModularWeb.json
+python manage.py dumpdata > \<<appName>>\fixtures\init<<appName>>.json
 Note: Make sure it is UTF8 encoded!!

@@ -8,8 +8,8 @@ django_workspace.code-workspace
 db.sqlite3
 
 
-modularWeb/static/
-personalWeb/migrations/
+baseModule/static/
+mainApp/migrations/
 
 fixtures/
 etc/

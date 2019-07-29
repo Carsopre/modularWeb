@@ -7,7 +7,7 @@ from polymorphic.admin import \
     PolymorphicInlineSupportMixin, \
     StackedPolymorphicInline
 
-from personalWeb.models import *
+from mainApp.models import *
 
 
 # Media admin
