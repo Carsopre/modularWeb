@@ -54,6 +54,9 @@ class BasePage(PolymorphicModel):
         return BasePage.objects.filter(
             slug=slug_page).first()
 
+    def get_url(self):
+        return self.slug
+
 
 class ScaffoldPage(BasePage):
     def get_content_pages(self):
@@ -62,6 +65,9 @@ class ScaffoldPage(BasePage):
         return [
             (mcp.page_order, mcp.content_page)
             for mcp in content_pages]
+
+    def get_url(self):
+        return 'scaffold/' + super().get_url()
 
 
 class FlexiblePage(BasePage):
@@ -120,6 +126,9 @@ class FlexiblePage(BasePage):
             'external_links': self.external_links,
             'libraries': self.libraries,
         }
+
+    def get_url(self):
+        return 'section/' + super().get_url()
 
 
 class IntroPage(FlexiblePage):
@@ -199,6 +208,12 @@ class PageLink(BaseField):
         blank=True,
         on_delete=models.CASCADE)
 
+    @property
+    def page_url(self):
+        if self.internal_link:
+            return self.internal_link.get_url()
+        return self.text_value
+
 
 class LandingPageField(BaseField):
     MAINFIELD = 'MF'
@@ -235,8 +250,11 @@ class Library(BaseField):
 
 
 class LibraryEntry(PageLink):
+    summary = models.TextField(
+        blank=True
+    )
     status = models.CharField(
-        blank=False,
+        blank=True,
         max_length=50)
 
 

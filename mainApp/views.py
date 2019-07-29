@@ -19,15 +19,15 @@ def not_found(request, exception):
 
 
 def index(request):
-    return render_page(request, 'home')
+    return render_page(request, 'scaffold', 'home')
 
 
 def render_page(
-        request, pageSlug, template='index.html', errorMessage=None):
+        request, page_type, page_slug, template='index.html', errorMessage=None):
     breadcrumbs = None
     title = None
 
-    section = get_content(pageSlug)
+    section = get_content(page_slug)
     if section:
         title = section.get('title')
 

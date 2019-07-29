@@ -15,39 +15,42 @@
             </div>
         {% endif %}
         <div class="caption-section">
-            {% if section_data.internal_links %}
+            {% if section_data.libraries %}
                 <div class="row content-row justify-content-around">
-                {% for lp in section_data.internal_links %}
-                    <div class="caption-wrapper
-                                col-lg-4
-                                col-md-6
-                                col-sm-12
-                                border border-dark
-                                rounded">
-                        <a class="contact" href="{{lp.basePage.full_url}}">
-                        <div class="row">
-                            <span class="col-12
-                                        {{lp.icon_field.faIconType}} fa-{{lp.icon_field.faIcon}} fa-3x"></span>
-                            <span class="col-12">
-                                {{lp.basePage.title}}
-                            </span>  
-                        </div>
-                        </a>  
-                    </div>
-                {% endfor %}
-                </div>
-            {% else %}
-                <div class="row content-row  justify-content-around">
-                    <div class="caption-wrapper
-                                border border-dark
-                                rounded
-                                col-lg-8
-                                col-md-10
-                                col-sm-12">
-                        <span>{{section_data.outro_text}}</span>
-                    </div>  
+                    {% for lp in section_data.libraries %}
+                        {% if forloop.counter0 > 0 %}
+                            {% for entry in lp.1.dict_values %}
+                                <div class="caption-wrapper
+                                            col-lg-4
+                                            col-md-6
+                                            col-sm-12
+                                            border border-dark
+                                            rounded">
+                                    <a class="contact" href="{{entry.page_url}}">
+                                    <div class="row">
+                                        <span class="col-12
+                                                    {{entry.icon_field.faIconType}} fa-{{entry.icon_field.faIcon}} fa-3x"></span>
+                                        <span class="col-12">
+                                            {{entry.text_value}}
+                                        </span>  
+                                    </div>
+                                    </a>  
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             {% endif %}
+            <div class="row content-row  justify-content-around">
+                <div class="caption-wrapper
+                            border border-dark
+                            rounded
+                            col-lg-8
+                            col-md-10
+                            col-sm-12">
+                    <span>{{section_data.outro_text}}</span>
+                </div>  
+            </div>
         </div>
     </div>
 {% endif%}

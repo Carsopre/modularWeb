@@ -1,10 +1,23 @@
-from django.conf.urls import include, url
+from django.urls import include, path
 from . import views
 
+app_name = 'mainApp'
 urlpatterns = [
-        url(r'^$', views.index, name='home'),
-        url('index', views.index, name='home'),
-        url('home', views.index, name='home'),
-        url(r'^section/(?P<pageSlug>[\w-]+)/$', views.render_page),
-#        url(r'^404', views.not_found, {'exception': Exception()}),
+        path(
+                'index',
+                views.index,
+                name='home'),
+        path(
+                'home',
+                views.index,
+                name='home'),
+        path(
+                '',
+                views.index,
+                name='home'),
+        path(
+                '<page_type>/<page_slug>/',
+                views.render_page,
+                name='render_page'),
+        # url(r'^404', views.not_found, {'exception': Exception()}),
 ]

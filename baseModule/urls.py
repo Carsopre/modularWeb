@@ -28,7 +28,7 @@ urlpatterns = [
             (
                 'mainApp.urls',
                 'mainApp'),
-            namespace='home'))
+            namespace='mainApp'))
 ]
 
 if settings.DEBUG:
