@@ -9,7 +9,9 @@ db.sqlite3
 
 
 baseModule/static/
-mainApp/migrations/
+mainApp/migrations/**
+!mainApp/migrations/__init__.py
+!mainApp/migrations/0001_initial.py
 
 fixtures/
 etc/
