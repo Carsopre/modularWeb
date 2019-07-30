@@ -72,7 +72,7 @@ class ScaffoldPage(BasePage):
 
 class FlexiblePage(BasePage):
     fields = models.ManyToManyField(
-        'BaseField',
+        'mainApp.BaseField',
         blank=True,
         related_name='has_fields',
         through='FlexiblePageField')
@@ -198,12 +198,12 @@ class BaseField(PolymorphicModel):
 
 class PageLink(BaseField):
     icon_field = models.ForeignKey(
-        to=MediaItem,
+        to='mainApp.MediaItem',
         blank=True,
         null=True,
         on_delete=models.SET_NULL)
     internal_link = models.ForeignKey(
-        to=FlexiblePage,
+        to='mainApp.FlexiblePage',
         null=True,
         blank=True,
         on_delete=models.CASCADE)
@@ -231,7 +231,7 @@ class LandingPageField(BaseField):
 
 class Library(BaseField):
     entries = models.ManyToManyField(
-        'LibraryEntry',
+        to='mainApp.LibraryEntry',
         blank=True,
         related_name='has_entries',
         through='LibraryEntryCollection')
@@ -259,17 +259,15 @@ class LibraryEntry(PageLink):
 
 
 # Cross-Reference Tables
-
-
 class CompositePage(models.Model):
     page_order = models.PositiveSmallIntegerField(
         default=0)
     scaffold_page = models.ForeignKey(
-        to=ScaffoldPage,
+        to='mainApp.ScaffoldPage',
         on_delete=models.CASCADE,
         related_name='composite_scaffold_page')
     content_page = models.ForeignKey(
-        to=FlexiblePage,
+        to='mainApp.FlexiblePage',
         on_delete=models.CASCADE,
         related_name='composite_content_page')
 
@@ -284,11 +282,11 @@ class FlexiblePageField(models.Model):
     order_link = models.PositiveSmallIntegerField(
         default=0)
     in_page = models.ForeignKey(
-        FlexiblePage,
+        to='mainApp.FlexiblePage',
         verbose_name='From',
         on_delete=models.CASCADE)
     to_field = models.ForeignKey(
-        BaseField,
+        to='mainApp.BaseField',
         verbose_name='Has field',
         related_name='has_field',
         on_delete=models.CASCADE)
@@ -296,10 +294,10 @@ class FlexiblePageField(models.Model):
 
 class LibraryEntryCollection(models.Model):
     library = models.ForeignKey(
-        to=Library,
+        to='mainApp.Library',
         related_name='has_collection',
         on_delete=models.CASCADE)
     entry = models.ForeignKey(
-        to=LibraryEntry,
+        to='mainApp.LibraryEntry',
         related_name='has_entry',
         on_delete=models.CASCADE)

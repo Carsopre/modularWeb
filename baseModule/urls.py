@@ -21,14 +21,26 @@ from django.conf.urls.static import static
 urlpatterns = [
     path(
         'admin/',
-        admin.site.urls),
+        admin.site.urls
+    ),
     path(
         '',
         include(
             (
                 'mainApp.urls',
                 'mainApp'),
-            namespace='mainApp'))
+            namespace='mainApp'
+        ),
+    ),
+    path(
+        'portfolio',
+        include(
+            (
+                'portFolioApp.urls',
+                'portFolioApp'),
+            namespace='portfolioApp'
+        ),
+    )
 ]
 
 if settings.DEBUG:
