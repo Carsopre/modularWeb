@@ -40,6 +40,9 @@ class EntryTag(models.Model):
         unique=True,
         max_length=25)
 
+    def __str__(self):
+        return self.tag
+
 
 # Cross-Reference Tables
 class PortFolioPageLibraryCollection(models.Model):

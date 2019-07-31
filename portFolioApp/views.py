@@ -11,7 +11,6 @@ def render_page(
         request, page_type, page_slug, template='index.html', errorMessage=None):
     breadcrumbs = None
     title = None
-
     section = get_content(page_slug)
     if section:
         title = section.get('title')
@@ -25,3 +24,7 @@ def render_page(
     }
 
     return rp(request, template, variables)
+
+
+def portfolioView(request, portfolio_slug):
+    pass

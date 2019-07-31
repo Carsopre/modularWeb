@@ -1,0 +1,7 @@
+{% if section_data %}
+    {% for section in section_data %}
+        {% if section.template and section.data %}
+            {% include section.template with section_data=section.data %}
+        {% endif %}
+    {% endfor %}
+{% endif%}

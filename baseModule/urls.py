@@ -27,20 +27,20 @@ urlpatterns = [
         '',
         include(
             (
+                'portFolioApp.urls',
+                'portFolioApp'),
+            namespace='portfolioApp'
+        ),
+    ),
+    path(
+        '',
+        include(
+            (
                 'mainApp.urls',
                 'mainApp'),
             namespace='mainApp'
         ),
     ),
-    path(
-        'portfolio',
-        include(
-            (
-                'portFolioApp.urls',
-                'portFolioApp'),
-            namespace='portfolioApp'
-        ),
-    )
 ]
 
 if settings.DEBUG:

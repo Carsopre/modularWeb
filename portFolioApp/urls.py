@@ -4,8 +4,8 @@ from . import views
 app_name = 'portFolioApp'
 urlpatterns = [
         path(
-                'portfolio/<page_slug>/',
-                views.render_page,
-                name='render_page'),
+                'portfolio/<portfolio_slug>/',
+                views.portfolioView,
+                name='portfolioView'),
         # url(r'^404', views.not_found, {'exception': Exception()}),
 ]

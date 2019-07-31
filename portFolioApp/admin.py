@@ -53,6 +53,5 @@ class PortFolioEntryAdmin(admin.ModelAdmin):
 class EntryTagAdmin(admin.ModelAdmin):
     base_model = EntryTag
     inlines =(
-        PortFolioEntryTagCollectionInline,
-        PortFolioLibraryTagCollectionInline
+        PortFolioLibraryTagCollectionInline,
     )
