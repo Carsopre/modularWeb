@@ -1,6 +1,6 @@
 appdirs==1.4.3
 django>=2.2.3
-packaging==16.8
+packaging==19.1
 pyparsing==2.1.10
 six==1.10.0
 django-polymorphic==2.1.2
